@@ -7,4 +7,8 @@ public interface UserService {
 
     User save(User user);
 
+    void confirmRegistration(String token);
+
+    void registerNewUser(User user);
+
 }

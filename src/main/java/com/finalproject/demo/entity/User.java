@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private Long id;
 
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String username;
 
     private String password;
@@ -60,7 +60,7 @@ public class User implements UserDetails {
     private Set<Device> devices = new HashSet<>();
 
 
-    private boolean enambled;
+    private boolean enabled;
 
 
 
@@ -99,7 +99,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enambled;
+        return enabled;
     }
 }
 
