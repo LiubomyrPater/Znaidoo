@@ -1,9 +1,14 @@
+
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
-<!DOCTYPE html>
+<c:set var="countryList" value="${['Ukraine', 'Poland']}" scope="application" />
+<c:set var="language" value="${['Українська', 'English']}" scope="application" />
+
+
+
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -14,12 +19,11 @@
 </head>
 
 <body>
+<%@page pageEncoding="utf-8"%>
 
 <div class="container">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin">
-
-
         <spring:bind path="Username">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="username" class="form-control"
@@ -43,6 +47,7 @@
                 <form:errors path="passwordConfirm"></form:errors>
             </div>
         </spring:bind>
+
         <spring:bind path="email">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="email" path="email" class="form-control"
@@ -50,9 +55,10 @@
                 <form:errors path="email"></form:errors>
             </div>
         </spring:bind>
+
         <spring:bind path="phoneNumber">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="phone" path="phoneNumber" class="form-control"
+                <form:input type="tel" path="phoneNumber" class="form-control"
                             placeholder="Your Phone number"></form:input>
                 <form:errors path="phoneNumber"></form:errors>
             </div>
@@ -60,16 +66,20 @@
 
         <spring:bind path="country">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="country" path="country" class="form-control"
-                            placeholder="Your country"></form:input>
+                <form:select type="text" path="country" class="form-control">
+                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:options items="${countryList}"/>
+                </form:select>
                 <form:errors path="country"></form:errors>
             </div>
         </spring:bind>
 
         <spring:bind path="language">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="language" path="language" class="form-control"
-                            placeholder="Your language"></form:input>
+            <div class="form-group ${status.error ? 'has-error' : ''}" >
+                <form:select type="text" path="language" class="form-control">
+                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:options items="${language}"/>
+                </form:select>
                 <form:errors path="language"></form:errors>
             </div>
         </spring:bind>

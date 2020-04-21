@@ -1,7 +1,5 @@
 package com.finalproject.demo.entity;
 
-import com.finalproject.demo.entity.enumerations.Country;
-import com.finalproject.demo.entity.enumerations.Language;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,8 +27,7 @@ public class User implements UserDetails {
     @GeneratedValue
     private Long id;
 
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     private String password;
@@ -38,22 +35,19 @@ public class User implements UserDetails {
     @Transient
     private String passwordConfirm;
 
-
     @Email
     @Column(unique = true, nullable = false)
     private String email;
-
 
     @Pattern(regexp = "(\\+38|0)[0-9]{10}")
     @Column (unique = true, nullable = false)
     private String phoneNumber;
 
-    @Enumerated(value = EnumType.STRING)
-    private Country country;
+
+    private String country;
 
 
-    @Enumerated(value = EnumType.STRING)
-    private Language language;
+    private String language;
 
     @OneToMany
     @JoinColumn
