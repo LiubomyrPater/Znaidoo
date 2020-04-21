@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <html lang="en">
 <head>
@@ -31,14 +32,57 @@
         <form id="logoutForm" method="POST" action="${contextPath}/logout"></form>
     </c:if>
 
+</div>
+
+<div>
+    <button class="btn btn-default" onclick="null" >Devices</button>
+
+
+    <div class="devices-container">
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Period link</th>
+                <th>Period flash</th>
+                <th>Visible</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items="${devices}" var="device">
+                <tr>
+                    <td>${device.name}</td>
+                    <td>${device.name}</td>
+                    <td>${device.name}</td>
+                    <td>${device.name}</td>
+
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+
+    </div>
 
 </div>
+
+
+
+<div>
+
+
+</div>
+
+
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 
 </html>
+
+
 
 
 
