@@ -24,7 +24,7 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="userForm" class="form-signin">
-        <spring:bind path="Username">
+        <spring:bind path="username">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="username" class="form-control"
                             placeholder="Nickname" autofocus="true"></form:input>

@@ -11,6 +11,9 @@
     <title>Admin</title>
 </head>
 <body>
+<div>
+    <button type="button" onclick='window.location.href = "admin/createNewDevice"'>Create new device</button>
+</div>
 
 </body>
 </html>

@@ -5,10 +5,12 @@ import com.finalproject.demo.entity.User;
 public interface UserService {
 
 
-    User save(User user);
+    /*User save(User user);*/
 
     void confirmRegistration(String token);
 
     void registerNewUser(User user);
+
+    Long findUserCurrentId();
 
 }

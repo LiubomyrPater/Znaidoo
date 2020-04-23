@@ -30,6 +30,7 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @Transient
@@ -43,10 +44,10 @@ public class User implements UserDetails {
     @Column (unique = true, nullable = false)
     private String phoneNumber;
 
-
+    @Column(nullable = false)
     private String country;
 
-
+    @Column(nullable = false)
     private String language;
 
     @OneToMany
@@ -57,9 +58,8 @@ public class User implements UserDetails {
     private boolean enabled;
 
 
-
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<com.finalproject.demo.entity.Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
 
     @Override

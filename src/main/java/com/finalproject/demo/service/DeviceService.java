@@ -1,17 +1,25 @@
 package com.finalproject.demo.service;
 
 import com.finalproject.demo.entity.Device;
+import com.finalproject.demo.entity.enumerations.DeviceType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.security.Principal;
 import java.util.Optional;
 
 public interface DeviceService {
 
-    Device create(Device device);
+    void create(Device device);
 
-    Optional<Device> findById(Integer id);
+    void connectToUser(Device device, Principal principal);
 
-    Device update(Device device);
+//    Optional<Device> findById(Integer id);
+//
+//    Device update(Device device);
+//
+//    void deleteById(Integer id);
 
-    void deleteById(Integer id);
-
+//    Page<Device> findByUserId(Integer userId, Pageable pageable);
 
 }

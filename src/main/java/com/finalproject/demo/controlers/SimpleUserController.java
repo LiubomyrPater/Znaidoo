@@ -1,8 +1,11 @@
 package com.finalproject.demo.controlers;
 
+import com.finalproject.demo.controlers.validator.UserDeviceValidator;
 import com.finalproject.demo.controlers.validator.UserValidator;
 
+import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.service.DeviceService;
 import com.finalproject.demo.service.UserService;
 import com.finalproject.demo.service.event.RegisterUserEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,26 +19,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 
 @Controller
-public class AuthorisationController {
+public class SimpleUserController {
 
 
     private final UserValidator userValidator;
     private final UserService userService;
     private final ApplicationEventPublisher eventPublisher;
+    private final UserDeviceValidator userDeviceValidator;
+    private final DeviceService deviceService;
 
 
-    public AuthorisationController(UserValidator userValidator, UserService userService, ApplicationEventPublisher eventPublisher) {
+    public SimpleUserController(UserValidator userValidator, UserService userService, ApplicationEventPublisher eventPublisher, UserDeviceValidator userDeviceValidator, DeviceService deviceService) {
         this.userValidator = userValidator;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
+        this.userDeviceValidator = userDeviceValidator;
+        this.deviceService = deviceService;
     }
+
+    @GetMapping({"/home", "/"})
+    public String home(Model model) {
+        model.addAttribute("message", "Hello from controller");
+        return "home";
+    }
+
 
     @GetMapping("/login")
     public String getLoginPage() {
         return "login";
+    }
+
+    @GetMapping("/home/userAddDevice")
+    public String getUserAddDevicePage(Model model) {
+        model.addAttribute("userAddDeviceForm", new Device());
+        return "userAddDevice";
     }
 
     @GetMapping("/registration")
@@ -44,9 +65,10 @@ public class AuthorisationController {
         return "registration";
     }
 
-
-
-
+    @GetMapping("/account")
+    public String getAccountPage() {
+        return "account";
+    }
 
     @GetMapping("/demoPage")
     public String getDemoPage() {
@@ -58,15 +80,7 @@ public class AuthorisationController {
         return "forgottenPass";
     }
 
-   /* @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User user, BindingResult bindingResult) {
-        userValidator.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-        userService.save(user);
-        return "redirect:/login";
-    }*/
+
 
 
     @PostMapping("/registration")
@@ -80,11 +94,27 @@ public class AuthorisationController {
         return "success";
     }
 
+
+
+
     @GetMapping("/confirmRegistration")
     public String confirmRegistration(@RequestParam String token) {
-
         userService.confirmRegistration(token);
         return "redirect:/login";
+    }
+
+
+
+
+    @PostMapping("/home/userAddDevice")
+    public String registration(@ModelAttribute("userAddDeviceForm") Device device, BindingResult bindingResult, Principal principal) {
+        userDeviceValidator.validate(device, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "userAddDevice";
+        }
+        deviceService.connectToUser(device, principal);
+
+        return "home";
     }
 
 }

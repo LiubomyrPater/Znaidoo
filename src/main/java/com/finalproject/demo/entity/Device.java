@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString
+
 @NoArgsConstructor
 
 @Entity
@@ -27,11 +27,17 @@ public class Device {
     @Enumerated(value = EnumType.STRING)
     private DeviceType deviceType;
 
+    @Column(unique = true)
+    private String serialNumber;
+
     private String name;
 
     private Integer periodLink;
 
-    private Integer periodFlash;
+
+
+
+    private boolean usingUser;
 
     @OneToMany
     @JoinColumn
