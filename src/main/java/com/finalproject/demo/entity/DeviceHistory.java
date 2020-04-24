@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "device_history")
 public class DeviceHistory {
 
     @Id

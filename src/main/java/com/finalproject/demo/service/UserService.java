@@ -5,7 +5,7 @@ import com.finalproject.demo.entity.User;
 public interface UserService {
 
 
-    /*User save(User user);*/
+    /*User save(User userView);*/
 
     void confirmRegistration(String token);
 

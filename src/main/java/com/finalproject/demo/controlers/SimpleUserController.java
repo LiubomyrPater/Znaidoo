@@ -8,6 +8,7 @@ import com.finalproject.demo.entity.User;
 import com.finalproject.demo.service.DeviceService;
 import com.finalproject.demo.service.UserService;
 import com.finalproject.demo.service.event.RegisterUserEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import java.security.Principal;
 
 
 @Controller
+@Slf4j
 public class SimpleUserController {
 
 
@@ -108,6 +110,9 @@ public class SimpleUserController {
 
     @PostMapping("/home/userAddDevice")
     public String registration(@ModelAttribute("userAddDeviceForm") Device device, BindingResult bindingResult, Principal principal) {
+
+        log.info("controller");
+
         userDeviceValidator.validate(device, bindingResult);
         if (bindingResult.hasErrors()) {
             return "userAddDevice";

@@ -20,9 +20,9 @@ public class UserValidator implements Validator {
 
         User user = (User) o;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Not empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Not empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "Not empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "not.empty", "Not empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "not.empty", "Not empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "not.empty", "Not empty");
         if (user.getPassword().length() < 3) {
             errors.rejectValue("password", "Size.userForm.password");
         }

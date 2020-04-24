@@ -22,6 +22,8 @@
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 <body>
+<%@page pageEncoding="UTF-8"%>
+
 <div class="container">
     <form:form method="POST" modelAttribute="userAddDeviceForm" class="form-signin">
         <spring:bind path="serialNumber">

@@ -19,7 +19,6 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "user")
 public class User implements UserDetails {
 
 
@@ -27,44 +26,62 @@ public class User implements UserDetails {
     @GeneratedValue
     private Long id;
 
+
     @Column(nullable = false, unique = true)
     private String username;
+
 
     @Column(nullable = false)
     private String password;
 
+
     @Transient
     private String passwordConfirm;
+
 
     @Email
     @Column(unique = true, nullable = false)
     private String email;
 
+
     @Pattern(regexp = "(\\+38|0)[0-9]{10}")
     @Column (unique = true, nullable = false)
     private String phoneNumber;
 
+
     @Column(nullable = false)
     private String country;
+
 
     @Column(nullable = false)
     private String language;
 
-    @OneToMany
-    @JoinColumn
-    private Set<Device> devices = new HashSet<>();
-
 
     private boolean enabled;
 
+    @OneToOne
+    private Viewer viewer;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<Device> device = new HashSet<>();
+
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>();
+    @JoinColumn
+    private Set<Role> role = new HashSet<>();
+
+
+
+
+
+
+
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return role;
     }
 
     @Override

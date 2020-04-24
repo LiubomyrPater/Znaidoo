@@ -17,7 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "device")
 public class Device {
 
     @Id
@@ -34,14 +33,15 @@ public class Device {
 
     private Integer periodLink;
 
-
-
-
     private boolean usingUser;
 
     @OneToMany
-    @JoinColumn
-    private Set<User> CanGet = new HashSet<>();
+    @JoinColumn(name = "device_id")
+    private Set<Viewer> viewers = new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "device_id")
+    private Set<DeviceHistory> deviceHistory = new HashSet<>();
 
 
 }

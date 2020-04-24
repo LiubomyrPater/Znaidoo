@@ -32,10 +32,10 @@ public class UserServiceImpl implements UserService {
 
 /*
     @Override
-    public User save(User user){
-        user.getRoles().add(roleRepository.findByName("ROLE_USER"));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public User save(User userView){
+        userView.getRole().add(roleRepository.findByName("ROLE_USER"));
+        userView.setPassword(bCryptPasswordEncoder.encode(userView.getPassword()));
+        return userRepository.save(userView);
     }
 */
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.getRoles().add(roleRepository.findByName("ROLE_USER"));
+        user.getRole().add(roleRepository.findByName("ROLE_USER"));
         userRepository.save(user);
     }
 
