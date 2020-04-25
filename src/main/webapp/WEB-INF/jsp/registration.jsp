@@ -50,7 +50,7 @@
 
         <spring:bind path="email">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="email" path="email" class="form-control"
+                <form:input type="text" path="email" class="form-control"
                             placeholder="Your Email"></form:input>
                 <form:errors path="email"></form:errors>
             </div>
@@ -59,7 +59,7 @@
         <spring:bind path="phoneNumber">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="tel" path="phoneNumber" class="form-control"
-                            placeholder="Your Phone number"></form:input>
+                            placeholder="Phone number +001234567890"></form:input>
                 <form:errors path="phoneNumber"></form:errors>
             </div>
         </spring:bind>
@@ -67,7 +67,7 @@
         <spring:bind path="country">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:select type="text" path="country" class="form-control">
-                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:option value="--- Select ---" label="--- Select ---"/>
                     <form:options items="${countryList}"/>
                 </form:select>
                 <form:errors path="country"></form:errors>
@@ -77,7 +77,7 @@
         <spring:bind path="language">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
                 <form:select type="text" path="language" class="form-control">
-                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:option value="--- Select ---" label="--- Select ---"/>
                     <form:options items="${language}"/>
                 </form:select>
                 <form:errors path="language"></form:errors>

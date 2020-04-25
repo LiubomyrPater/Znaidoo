@@ -33,16 +33,15 @@ public class UserDeviceValidator implements Validator {
 
 
         if (device.getSerialNumber().length() != 10) {
-            errors.rejectValue("serialNumber", "device.serialNumber.size");
+            errors.rejectValue("serialNumber", "device.serialNumber.size","Serial number size must be 10 numbers length!");
         }else {
             if (deviceRepository.findDeviceBySerialNumber(device.getSerialNumber()).isPresent()){
                 if (deviceRepository.findDeviceBySerialNumber(device.getSerialNumber()).get().isUsingUser()) {
-                    errors.rejectValue("serialNumber", "device.used");
+                    errors.rejectValue("serialNumber", "device.used", "Device already is using!");
                 }
             }else {
-                errors.rejectValue("serialNumber", "device.notExist");
+                errors.rejectValue("serialNumber", "device.notExist", "Device not exist!");
             }
-
         }
 
 

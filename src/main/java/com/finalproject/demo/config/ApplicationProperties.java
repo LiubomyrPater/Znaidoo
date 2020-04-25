@@ -13,4 +13,7 @@ public class ApplicationProperties {
 
     @Value("${demo.config.token.time-to-live}")
     private int tokenTimeToLiveInHours;
+
+    @Value("${demo.config.ApplicationProperties.passwordLength}")
+    private int passwordLength;
 }

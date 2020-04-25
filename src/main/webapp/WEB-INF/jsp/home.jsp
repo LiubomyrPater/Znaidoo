@@ -41,7 +41,7 @@
             </tr>
 
             <tbody>
-            <c:forEach items="${incomePage.getContent()}" var="device">
+            <c:forEach items="${devices}" var="device">
                 <tr>
                     <td>${device.device_type}</td>
                     <td>${device.name}</td>

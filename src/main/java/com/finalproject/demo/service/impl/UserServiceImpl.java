@@ -58,9 +58,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerNewUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())
+                || userRepository.existsByPhoneNumber(user.getPhoneNumber())
+                || userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistException();
         }
+
 
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.getRole().add(roleRepository.findByName("ROLE_USER"));

@@ -40,7 +40,7 @@ public class RegisterUserEventListener {
         try {
             mailSender.send(message);
         } catch (Exception e) {
-            log.error("error while send email to {}", user.getEmail());
+            log.error(e.getMessage(), user.getEmail());
         }
     }
 

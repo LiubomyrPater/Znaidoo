@@ -5,8 +5,10 @@ import com.finalproject.demo.entity.enumerations.DeviceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.Query;
 import java.security.Principal;
 import java.util.Optional;
+import java.util.Set;
 
 public interface DeviceService {
 
@@ -14,12 +16,8 @@ public interface DeviceService {
 
     void connectToUser(Device device, Principal principal);
 
-//    Optional<Device> findById(Integer id);
-//
-//    Device update(Device device);
-//
-//    void deleteById(Integer id);
 
-//    Page<Device> findByUserId(Integer userId, Pageable pageable);
+
+    Set<Device> findDevicesByUser(Principal principal);
 
 }

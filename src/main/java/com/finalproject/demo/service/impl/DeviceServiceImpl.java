@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
+import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -46,9 +48,15 @@ public class DeviceServiceImpl implements DeviceService {
 
         userRepository.save(user);
 
-
-
     }
+
+    @Override
+    public Set<Device> findDevicesByUser(Principal principal) {
+
+return null;
+        /*return deviceRepository.findDevicesByUserId_____(userRepository.findByUsername(principal.getName()).get().getId());*/
+    }
+
 
     //
 //    @Override
