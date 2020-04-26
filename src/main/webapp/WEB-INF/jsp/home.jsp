@@ -28,31 +28,36 @@
 <div>
     <button class="btn btn-default" id="devices-container-button" onclick="show_hide_elem('devices-container')" >Devices</button>
 
-    <div class="devices-container" id="devices-container">
+    <div class="panel panel-default">
+        <div class="devices-container" id="devices-container">
+            <table class="table table-hover table-bordered table-condensed table-striped">
 
-        <table class="table table-hover table-responsive">
-
-            <tr>
-                <th>Type</th>
-                <th>Name</th>
-                <th>Period link</th>
-                <th>Period flash</th>
-                <th>Visible</th>
-            </tr>
-
-            <tbody>
-            <c:forEach items="${devices}" var="device">
                 <tr>
-                    <td>${device.device_type}</td>
-                    <td>${device.name}</td>
-                    <td>${device.period_link}</td>
-                    <td>${device.period_flash}</td>
-                    <td><input class="checkbox"></td>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Period link</th>
+                    <th>Battery %</th>
+                    <th>Visible</th>
+                    <th>Owner</th>
+                    <th width="70"></th>
                 </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-        <button class="btn btn-default" id="add-new-device-button" onclick='window.location.href = "home/userAddDevice"'>Add devices</button>
+
+                <tbody>
+                <c:forEach items="${devices}" var="device">
+                    <tr>
+                        <td>${device.deviceType}</td>
+                        <td>${device.name}</td>
+                        <td>${device.periodLink}</td>
+                        <td>${device.battery}</td>
+                        <td><input type="checkbox"></td>
+                        <td>${pageContext.request.userPrincipal.name}</td>
+                        <td><a href="<c:url value='/${contextPath}/editDevice'/>" class="btn btn-success custom width">Edit</a></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+            <button class="btn btn-default" id="add-new-device-button" onclick='window.location.href = "userAddDevice"'>Add devices</button>
+        </div>
     </div>
 </div>
 </body>

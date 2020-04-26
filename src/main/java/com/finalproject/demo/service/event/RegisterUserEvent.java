@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationEvent;
 public class RegisterUserEvent extends ApplicationEvent {
 
     private User user;
-
     private String appUrl;
 
     public RegisterUserEvent(Object source, User user, String appUrl) {

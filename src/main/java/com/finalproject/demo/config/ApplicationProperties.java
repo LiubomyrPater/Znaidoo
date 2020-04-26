@@ -16,4 +16,6 @@ public class ApplicationProperties {
 
     @Value("${demo.config.ApplicationProperties.passwordLength}")
     private int passwordLength;
+
+
 }

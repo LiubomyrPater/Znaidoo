@@ -4,13 +4,13 @@ import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
+import com.finalproject.demo.repository.ViewerRepository;
 import com.finalproject.demo.service.DeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -20,10 +20,12 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final DeviceRepository deviceRepository;
     private final UserRepository userRepository;
+    private final ViewerRepository viewerRepository;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository, UserRepository userRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository, UserRepository userRepository, ViewerRepository viewerRepository) {
         this.deviceRepository = deviceRepository;
         this.userRepository = userRepository;
+        this.viewerRepository = viewerRepository;
     }
 
     @Override
@@ -43,8 +45,11 @@ public class DeviceServiceImpl implements DeviceService {
 
         persistedDevice.setName(device.getName());
         persistedDevice.setUsingUser(true);
+        persistedDevice.getViewers().add(user.getViewer());
 
         user.getDevice().add(persistedDevice);
+
+        deviceRepository.save(persistedDevice);
 
         userRepository.save(user);
 
@@ -52,9 +57,17 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Set<Device> findDevicesByUser(Principal principal) {
+        return userRepository.findUsersDevices(userRepository.findByUsername(principal.getName()).get().getId());
+    }
 
-return null;
-        /*return deviceRepository.findDevicesByUserId_____(userRepository.findByUsername(principal.getName()).get().getId());*/
+    @Override
+    public Set<Device> findDevicesByViewer(Principal principal) {
+        return viewerRepository.findViewersDevices(userRepository
+                .findByUsername(principal.getName())
+                .get()
+                .getViewer()
+                .getId()
+        );
     }
 
 

@@ -4,6 +4,7 @@ import com.finalproject.demo.config.ApplicationProperties;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.entity.VerificationToken;
 import com.finalproject.demo.repository.VerificationTokenRepository;
+import com.finalproject.demo.repository.ViewerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -19,6 +20,7 @@ public class RegisterUserEventListener {
 
     private final JavaMailSender mailSender;
     private final VerificationTokenRepository tokenRepository;
+
     private final ApplicationProperties properties;
 
     @EventListener
@@ -28,6 +30,8 @@ public class RegisterUserEventListener {
 
         VerificationToken token = tokenRepository
                 .save(new VerificationToken(user, properties.getTokenTimeToLiveInHours()));
+
+
 
         SimpleMailMessage message = new SimpleMailMessage();
 

@@ -2,10 +2,12 @@ package com.finalproject.demo.service.impl;
 
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.entity.VerificationToken;
+import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.exceptions.UserAlreadyExistException;
 import com.finalproject.demo.repository.RoleRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.VerificationTokenRepository;
+import com.finalproject.demo.repository.ViewerRepository;
 import com.finalproject.demo.service.UserService;
 import com.finalproject.demo.utils.SecurityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,13 +23,19 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final VerificationTokenRepository tokenRepository;
+    private final ViewerRepository viewerRepository;
 
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder, VerificationTokenRepository tokenRepository) {
+
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           BCryptPasswordEncoder bCryptPasswordEncoder,
+                           VerificationTokenRepository tokenRepository, ViewerRepository viewerRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenRepository = tokenRepository;
+        this.viewerRepository = viewerRepository;
     }
 
 /*
@@ -67,7 +75,11 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.getRole().add(roleRepository.findByName("ROLE_USER"));
+
+
+        user.setViewer(viewerRepository.save(new Viewer()));
         userRepository.save(user);
+
     }
 
     @Override

@@ -21,8 +21,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByPhoneNumber(String phoneNumber);
 
     boolean existsByEmail(String email);
-/*
-    @Query("select u.devices from User u where u.id=?1")
-    Set<Device> findUsersDevices(String userId);*/
+
+
+    @Query("select u.device from User u where u.id=?1")
+    Set<Device> findUsersDevices(Long userId);
+
+
+
 
 }

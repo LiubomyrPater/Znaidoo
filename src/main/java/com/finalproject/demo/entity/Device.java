@@ -1,10 +1,12 @@
 package com.finalproject.demo.entity;
 
+import com.finalproject.demo.config.ApplicationProperties;
 import com.finalproject.demo.entity.enumerations.DeviceType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -31,12 +33,14 @@ public class Device {
 
     private String name;
 
-    private Integer periodLink;
+    //@Column(columnDefinition = "integer default 100")
+    private Integer periodLink = 100;
+
+    private Integer battery = 100;
 
     private boolean usingUser;
 
-    @OneToMany
-    @JoinColumn(name = "device_id")
+    @ManyToMany
     private Set<Viewer> viewers = new HashSet<>();
 
     @OneToMany

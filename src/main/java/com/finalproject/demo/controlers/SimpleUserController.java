@@ -5,6 +5,7 @@ import com.finalproject.demo.controlers.validator.UserValidator;
 
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.service.DeviceService;
 import com.finalproject.demo.service.UserService;
 import com.finalproject.demo.service.event.RegisterUserEvent;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Set;
 
 
 @Controller
@@ -44,10 +46,21 @@ public class SimpleUserController {
     }
 
     @GetMapping({"/home", "/"})
-    public String home(Model model) {
+    public String home(Model model, Principal principal) {
         model.addAttribute("message", "Hello from controller");
+
+
+        Set<Device> devices = deviceService.findDevicesByUser(principal);
+
+
+        Set<Device> vDevices = deviceService.findDevicesByUser(principal);
+
+
+        model.addAttribute("devices", vDevices);
         return "home";
     }
+
+
 
 
     @GetMapping("/login")
@@ -55,7 +68,7 @@ public class SimpleUserController {
         return "login";
     }
 
-    @GetMapping("/home/userAddDevice")
+    @GetMapping("/userAddDevice")
     public String getUserAddDevicePage(Model model) {
         model.addAttribute("userAddDeviceForm", new Device());
         return "userAddDevice";
@@ -70,6 +83,11 @@ public class SimpleUserController {
     @GetMapping("/account")
     public String getAccountPage() {
         return "account";
+    }
+
+    @GetMapping("/help")
+    public String getHelpPage() {
+        return "help";
     }
 
     @GetMapping("/demoPage")
@@ -108,8 +126,9 @@ public class SimpleUserController {
 
 
 
-    @PostMapping("/home/userAddDevice")
-    public String registration(@ModelAttribute("userAddDeviceForm") Device device, BindingResult bindingResult, Principal principal) {
+    @PostMapping("/userAddDevice")
+    public String registration(@ModelAttribute("userAddDeviceForm") Device device,
+                               BindingResult bindingResult, Principal principal, Model model) {
 
         log.info("controller");
 
@@ -118,6 +137,11 @@ public class SimpleUserController {
             return "userAddDevice";
         }
         deviceService.connectToUser(device, principal);
+
+
+
+        Set<Device> devices = deviceService.findDevicesByUser(principal);
+        model.addAttribute("devices", devices);
 
         return "home";
     }

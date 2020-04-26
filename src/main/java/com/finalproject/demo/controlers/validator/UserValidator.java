@@ -31,8 +31,6 @@ public class UserValidator implements Validator {
         User user = (User) o;
 
 
-
-
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phoneNumber", "not.empty","Not empty space");
 
 
