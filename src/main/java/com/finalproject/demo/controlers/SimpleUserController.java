@@ -5,7 +5,7 @@ import com.finalproject.demo.controlers.validator.UserValidator;
 
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
-import com.finalproject.demo.entity.Viewer;
+import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.service.DeviceService;
 import com.finalproject.demo.service.UserService;
 import com.finalproject.demo.service.event.RegisterUserEvent;
@@ -32,14 +32,17 @@ public class SimpleUserController {
 
     private final UserValidator userValidator;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final UserDeviceValidator userDeviceValidator;
     private final DeviceService deviceService;
 
 
-    public SimpleUserController(UserValidator userValidator, UserService userService, ApplicationEventPublisher eventPublisher, UserDeviceValidator userDeviceValidator, DeviceService deviceService) {
+
+    public SimpleUserController(UserValidator userValidator, UserService userService, UserRepository userRepository, ApplicationEventPublisher eventPublisher, UserDeviceValidator userDeviceValidator, DeviceService deviceService) {
         this.userValidator = userValidator;
         this.userService = userService;
+        this.userRepository = userRepository;
         this.eventPublisher = eventPublisher;
         this.userDeviceValidator = userDeviceValidator;
         this.deviceService = deviceService;
@@ -57,6 +60,7 @@ public class SimpleUserController {
 
 
         model.addAttribute("devices", vDevices);
+
         return "home";
     }
 

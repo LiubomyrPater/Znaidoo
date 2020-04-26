@@ -22,6 +22,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     boolean existsByEmail(String email);
 
+    Optional<User> findByDevice(Device device);
+
 
     @Query("select u.device from User u where u.id=?1")
     Set<Device> findUsersDevices(Long userId);

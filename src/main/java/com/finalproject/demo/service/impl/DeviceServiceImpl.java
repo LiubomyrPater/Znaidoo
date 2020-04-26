@@ -2,6 +2,7 @@ package com.finalproject.demo.service.impl;
 
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.ViewerRepository;
@@ -45,6 +46,7 @@ public class DeviceServiceImpl implements DeviceService {
 
         persistedDevice.setName(device.getName());
         persistedDevice.setUsingUser(true);
+
         persistedDevice.getViewers().add(user.getViewer());
 
         user.getDevice().add(persistedDevice);
@@ -68,6 +70,19 @@ public class DeviceServiceImpl implements DeviceService {
                 .getViewer()
                 .getId()
         );
+    }
+
+
+    @Override
+    public void addNewViewer(Viewer viewer, String serialNumber) {
+
+        Device persistedDevice = deviceRepository.findDeviceBySerialNumber(serialNumber)
+                .orElseThrow(() -> new EntityNotFoundException("user with id " + serialNumber + " was not found"));
+
+        persistedDevice.getViewers().add(viewer);
+
+        deviceRepository.save(persistedDevice);
+
     }
 
 

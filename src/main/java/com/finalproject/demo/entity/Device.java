@@ -40,6 +40,9 @@ public class Device {
 
     private boolean usingUser;
 
+    @ManyToOne
+    private User user;
+
     @ManyToMany
     private Set<Viewer> viewers = new HashSet<>();
 

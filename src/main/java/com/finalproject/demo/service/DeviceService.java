@@ -1,6 +1,7 @@
 package com.finalproject.demo.service;
 
 import com.finalproject.demo.entity.Device;
+import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.entity.enumerations.DeviceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ public interface DeviceService {
     void connectToUser(Device device, Principal principal);
 
 
+    void addNewViewer(Viewer viewer, String serialNumber);
 
     Set<Device> findDevicesByUser(Principal principal);
 

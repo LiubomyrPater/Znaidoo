@@ -50,7 +50,7 @@
                         <td>${device.periodLink}</td>
                         <td>${device.battery}</td>
                         <td><input type="checkbox"></td>
-                        <td>${pageContext.request.userPrincipal.name}</td>
+                        <td>${device.user.username}</td>
                         <td><a href="<c:url value='/${contextPath}/editDevice'/>" class="btn btn-success custom width">Edit</a></td>
                     </tr>
                 </c:forEach>
