@@ -4,6 +4,7 @@ import com.finalproject.demo.controlers.validator.SimpleUserValidator;
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.service.DeviceService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import java.security.Principal;
 import java.util.Set;
 
 @Controller
+@Slf4j
 public class DeviceController {
 
     private final DeviceService deviceService;
@@ -52,13 +54,17 @@ public class DeviceController {
         }
 
 
+        log.info(user.getUsername());
 
 
-        deviceService.addNewViewer(user.getViewer(), "xxxxxxxxxxxxxxxx");
 
-        Set<Device> devices = deviceService.findDevicesByUser(principal);
+        deviceService.addNewViewer(user.getUsername(), "3333333333");
+
+        /*Set<Device> devices = deviceService.findDevicesByUser(principal);
+        model.addAttribute("devices", devices);*/
+
+        Set<Device> devices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", devices);
-
 
         return "home";
     }

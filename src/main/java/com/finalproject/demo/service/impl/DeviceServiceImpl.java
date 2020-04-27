@@ -59,27 +59,55 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Set<Device> findDevicesByUser(Principal principal) {
-        return userRepository.findUsersDevices(userRepository.findByUsername(principal.getName()).get().getId());
+        return userRepository.findUsersDevices(userRepository
+                .findByUsername(principal.getName())
+                .get()
+                .getId()
+        );
     }
 
     @Override
     public Set<Device> findDevicesByViewer(Principal principal) {
-        return viewerRepository.findViewersDevices(userRepository
+
+        return deviceRepository.findDeviceByViewers(userRepository
                 .findByUsername(principal.getName())
                 .get()
                 .getViewer()
                 .getId()
         );
+
+
+
+        /*
+        return viewerRepository.findViewersDevices(userRepository
+                .findByUsername(principal.getName())
+                .get()
+                .getViewer()
+                .getId()
+        );*/
     }
 
 
     @Override
-    public void addNewViewer(Viewer viewer, String serialNumber) {
+    public void addNewViewer(String username, String serialNumber) {
 
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(serialNumber)
                 .orElseThrow(() -> new EntityNotFoundException("user with id " + serialNumber + " was not found"));
 
-        persistedDevice.getViewers().add(viewer);
+
+
+        //add device to viewer
+        Viewer persistedViewer = viewerRepository.findById(userRepository.findByUsername(username)
+                .get()
+                .getViewer()
+                .getId())
+                .get();
+        persistedViewer.getDevices().add(persistedDevice);
+        viewerRepository.save(persistedViewer);
+
+
+
+        persistedDevice.getViewers().add(userRepository.findByUsername(username).get().getViewer());
 
         deviceRepository.save(persistedDevice);
 

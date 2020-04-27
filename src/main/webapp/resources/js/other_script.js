@@ -9,3 +9,10 @@ function show_hide_elem(id) {
         el.style.display="block";
     }
 }
+
+
+
+
+function changeLanguage(language) {
+    window.location.replace()
+}

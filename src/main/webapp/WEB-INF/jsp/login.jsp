@@ -9,12 +9,14 @@
 <head>
     <meta charset="utf-8">
     <title>Log in with your account</title>
-
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <script src="${contextPath}/resources/js/other_script.js"></script>
 </head>
 
 <body>
+
+
 
 <div class="container">
 
@@ -28,7 +30,13 @@
 
             <input name="password" type="password" class="form-control" placeholder="Password"/>
 
-            <label><input type="checkbox" checked="checked" >Remember me</label>
+            <%--<label><input type="checkbox" name="remember-me">Remember me</label>--%>
+
+            <tr>
+                <td>Remember Me:</td>
+                <td><input name="remember-me" type="checkbox" /></td>
+            </tr>
+
 
             <span>${error}</span>
 
@@ -48,13 +56,11 @@
             <button class="btn btn-lg btn-primary btn-block btn-default" type="button"
                     onclick='window.location.href = "demoPage"'>DEMO</button>
 
-            <%--<script>function log_in() {
-                window.location.href = "${contextPath}/registration"
-            }</script>--%>
+
+
+
 
         </div>
-
-
     </form>
 </div>
 

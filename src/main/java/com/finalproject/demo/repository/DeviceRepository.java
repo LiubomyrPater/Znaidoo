@@ -15,4 +15,7 @@ public interface DeviceRepository extends JpaRepository<Device, Integer> {
     Optional<Device> findDeviceBySerialNumber (String serialNumber);
 
 
+    @Query("SELECT d.viewers FROM Device d where d.id=?1")
+    Set<Device> findDeviceByViewers(Long viewerId);
+
 }

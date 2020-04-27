@@ -18,7 +18,8 @@ public interface DeviceService {
     void connectToUser(Device device, Principal principal);
 
 
-    void addNewViewer(Viewer viewer, String serialNumber);
+    void addNewViewer(String username, String serialNumber);
+
 
     Set<Device> findDevicesByUser(Principal principal);
 

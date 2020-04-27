@@ -53,10 +53,14 @@ public class SimpleUserController {
         model.addAttribute("message", "Hello from controller");
 
 
-        Set<Device> devices = deviceService.findDevicesByUser(principal);
+        //Set<Device> devices = deviceService.findDevicesByUser(principal);
 
 
-        Set<Device> vDevices = deviceService.findDevicesByUser(principal);
+
+
+
+        Set<Device> vDevices = deviceService.findDevicesByViewer(principal);
+
 
 
         model.addAttribute("devices", vDevices);
@@ -144,7 +148,10 @@ public class SimpleUserController {
 
 
 
-        Set<Device> devices = deviceService.findDevicesByUser(principal);
+        /*Set<Device> devices = deviceService.findDevicesByUser(principal);
+        model.addAttribute("devices", devices);*/
+
+        Set<Device> devices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", devices);
 
         return "home";

@@ -59,7 +59,7 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Viewer viewer;
 
     @OneToMany

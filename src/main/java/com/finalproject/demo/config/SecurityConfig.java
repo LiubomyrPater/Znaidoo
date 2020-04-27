@@ -6,12 +6,43 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
+//@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+
+
+
+    //remember-me
+    /*@Bean("authenticationManager")
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.inMemoryAuthentication()
+                .withUser("user1").password("{noop}user1Pass").roles("USER")
+                .and()
+                .withUser("admin1").password("{noop}admin1Pass").roles("ADMIN");
+
+    }*/
+
+
+
+
+
+
+
+
+
 
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -26,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/confirmRegistration",
                         "/success.jsp","/demoPage",
                         "/forgottenPassword",
+                        "/setViewer",
                         "/admin/**")
                 .permitAll()
                 .anyRequest().authenticated()
@@ -38,29 +70,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
-                .permitAll();
-    }
+                .permitAll()
 
-    /*
-    @Bean("authenticationManager")
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.inMemoryAuthentication()
-                .withUser("user1").password("{noop}user1Pass").role("USER")
+
+
+                .deleteCookies("JSESSIONID")
                 .and()
-                .withUser("admin1").password("{noop}admin1Pass").role("ADMIN");
-
+                .rememberMe()
+                .key("uniqueAndSecret")
+                .tokenValiditySeconds(86400)
+        ;
     }
 
-    @Bean
-    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        return new MySimpleUrlAuthenticationSuccessHandler();
-    }
-*/
 }
