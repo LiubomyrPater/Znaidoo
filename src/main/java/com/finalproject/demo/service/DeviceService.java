@@ -15,15 +15,11 @@ public interface DeviceService {
 
     void create(Device device);
 
-    void connectToUser(Device device, Principal principal);
+    void connectDeviceToUser(Device device, Principal principal);
 
-
-    void addNewViewer(String username, String serialNumber);
-
+    void addViewerToDevice(String username, String serialNumber);
 
     Set<Device> findDevicesByUser(Principal principal);
 
-
     Set<Device> findDevicesByViewer(Principal principal);
-
 }

@@ -24,7 +24,7 @@ public class AdminDeviceValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "serialNumber", "not.empty", "Not empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "deviceType", "not.empty","Not empty");
-        if (device.getSerialNumber().length() < 10) {
+        if (device.getSerialNumber().length() != 10) {
             errors.rejectValue("serialNumber", "device.serialNumber.size", "Serial number size must be 10 numbers length!");
         }
 

@@ -27,6 +27,10 @@
         .layer2{
             position: absolute;
         }
+        .layer3{
+            position: absolute;
+            opacity: 0.6;
+        }
     </style>
 
 </head>
@@ -67,7 +71,7 @@
         </script>
     </div>
 
-    <div class="layer2 panel panel-default">
+    <div class="layer3 panel panel-default">
         <div class="devices-container" id="devices-container">
             <table class="table table-hover table-bordered table-condensed table-striped">
 

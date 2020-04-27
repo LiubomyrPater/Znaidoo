@@ -43,7 +43,7 @@ public class Device {
     @ManyToOne
     private User user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Viewer> viewers = new HashSet<>();
 
     @OneToMany

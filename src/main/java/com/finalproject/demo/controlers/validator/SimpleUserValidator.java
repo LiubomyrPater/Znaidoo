@@ -1,6 +1,5 @@
 package com.finalproject.demo.controlers.validator;
 
-
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +28,9 @@ public class SimpleUserValidator implements Validator {
 
         User user = (User) o;
 
-
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "not.empty","Not empty");
 
         if (!userRepository.existsByUsername(user.getUsername()))
             errors.rejectValue("username", "user.notExist", "User not exist!");
-
-
-
     }
 }

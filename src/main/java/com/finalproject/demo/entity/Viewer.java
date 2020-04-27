@@ -14,7 +14,9 @@ public class Viewer {
     @GeneratedValue
     private Long id;
 
-    @ManyToMany
+
+    @ManyToMany(mappedBy = "viewers", fetch = FetchType.EAGER)
+
     private Set<Device> devices= new HashSet<>();
 
 

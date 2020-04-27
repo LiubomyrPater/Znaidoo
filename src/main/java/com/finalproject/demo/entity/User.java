@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@ToString
+
 @EqualsAndHashCode
 
 
@@ -62,7 +62,7 @@ public class User implements UserDetails {
     @OneToOne(fetch = FetchType.EAGER)
     private Viewer viewer;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private Set<Device> device = new HashSet<>();
 

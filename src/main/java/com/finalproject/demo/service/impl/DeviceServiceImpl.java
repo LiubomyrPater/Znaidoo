@@ -35,26 +35,24 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public void connectToUser(Device device, Principal principal) {
+    public void connectDeviceToUser(Device device, Principal principal) {
 
+        User persistedUser = userRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new EntityNotFoundException("user with name " + principal.getName() + " was not found"));
 
-        User user = userRepository.findByUsername(principal.getName())
-                .orElseThrow(() -> new EntityNotFoundException("user with id " + principal.getName() + " was not found"));
 
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(device.getSerialNumber())
-                .orElseThrow(() -> new EntityNotFoundException("user with id " + device.getSerialNumber() + " was not found"));
+                .orElseThrow(() -> new EntityNotFoundException("device with id " + device.getSerialNumber() + " was not found"));
+
 
         persistedDevice.setName(device.getName());
         persistedDevice.setUsingUser(true);
+        persistedDevice.getViewers().add(persistedUser.getViewer());
+        persistedUser.getDevice().add(persistedDevice);
+        userRepository.save(persistedUser);
 
-        persistedDevice.getViewers().add(user.getViewer());
-
-        user.getDevice().add(persistedDevice);
-
-        deviceRepository.save(persistedDevice);
-
-        userRepository.save(user);
-
+        //зайве
+        //deviceRepository.save(persistedDevice);
     }
 
     @Override
@@ -69,13 +67,15 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Set<Device> findDevicesByViewer(Principal principal) {
 
-        return deviceRepository.findDeviceByViewers(userRepository
+        Long viewerId = userRepository
                 .findByUsername(principal.getName())
                 .get()
                 .getViewer()
-                .getId()
+                .getId();
+        Set<Device> deviceByViewers = deviceRepository.findDeviceByViewers(viewerId
         );
 
+        return deviceByViewers;
 
 
         /*
@@ -89,50 +89,24 @@ public class DeviceServiceImpl implements DeviceService {
 
 
     @Override
-    public void addNewViewer(String username, String serialNumber) {
+    public void addViewerToDevice(String username, String serialNumber) {
 
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(serialNumber)
-                .orElseThrow(() -> new EntityNotFoundException("user with id " + serialNumber + " was not found"));
+                .orElseThrow(() -> new EntityNotFoundException("device with id " + serialNumber + " was not found"));
 
 
-
-        //add device to viewer
-        Viewer persistedViewer = viewerRepository.findById(userRepository.findByUsername(username)
-                .get()
-                .getViewer()
-                .getId())
-                .get();
-        persistedViewer.getDevices().add(persistedDevice);
-        viewerRepository.save(persistedViewer);
+        User persistedUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("user with username " + username + " was not found"));
 
 
-
-        persistedDevice.getViewers().add(userRepository.findByUsername(username).get().getViewer());
-
+        persistedDevice.getViewers().add(persistedUser.getViewer());
         deviceRepository.save(persistedDevice);
 
+/**
+        //не зберігає в базу
+        Viewer persistedViewer = viewerRepository.findById(persistedUser.getViewer().getId()).get();
+        persistedViewer.getDevices().add(persistedDevice);
+        viewerRepository.save(persistedViewer);
+*/
     }
-
-
-    //
-//    @Override
-//    public Optional<Device> findById(Integer id) {
-//        return Optional.empty();
-//    }
-//
-//    @Override
-//    public Device update(Device device) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void deleteById(Integer id) {
-//
-//    }
-
-//    @Override
-//    public Page<Device> findByUserId(Integer userId, Pageable pageable) {
-//        return deviceRepository.findById(userId, pageable);
-//    }
-
 }

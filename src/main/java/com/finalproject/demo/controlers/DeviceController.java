@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-
 import java.security.Principal;
 import java.util.Set;
 
@@ -24,14 +22,10 @@ public class DeviceController {
     private final DeviceService deviceService;
     private final SimpleUserValidator simpleUserValidator;
 
-
     public DeviceController(DeviceService deviceService, SimpleUserValidator simpleUserValidator) {
         this.deviceService = deviceService;
-
         this.simpleUserValidator = simpleUserValidator;
     }
-
-
 
 
     @GetMapping("/setViewer")
@@ -46,43 +40,28 @@ public class DeviceController {
     public String registration(@ModelAttribute("addViewerForm") User user,
                                BindingResult bindingResult, Principal principal, Model model) {
 
-
         simpleUserValidator.validate(user,bindingResult);
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors())
             return "setViewer";
-        }
 
-
-        log.info(user.getUsername());
-
-
-
-        deviceService.addNewViewer(user.getUsername(), "3333333333");
-
-        /*Set<Device> devices = deviceService.findDevicesByUser(principal);
-        model.addAttribute("devices", devices);*/
+        deviceService.addViewerToDevice(user.getUsername(), "4444444444");
 
         Set<Device> devices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", devices);
 
-        return "home";
+        return "redirect:home";
     }
 
 
-
-
-
-
-
-
+/*
     //не використовується
     @GetMapping("devices")
     public @ResponseBody Set<Device> setDevices (Principal principal, Model model){
         Set<Device> devices = deviceService.findDevicesByUser(principal);
         model.addAttribute("devices", devices);
         return devices;
-    }
+    }*/
 
 
 }

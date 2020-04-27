@@ -15,7 +15,6 @@ public class AdminController {
     private final AdminDeviceValidator adminDeviceValidator;
     private final DeviceService deviceService;
 
-
     public AdminController(AdminDeviceValidator adminDeviceValidator, DeviceService deviceService) {
         this.adminDeviceValidator = adminDeviceValidator;
         this.deviceService = deviceService;
@@ -40,6 +39,6 @@ public class AdminController {
             return "createNewDevice";
         }
         deviceService.create(device);
-        return "createNewDevice";
+        return "admin";
     }
 }
