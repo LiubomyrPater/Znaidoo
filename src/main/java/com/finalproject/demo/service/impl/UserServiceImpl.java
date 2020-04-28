@@ -8,7 +8,7 @@ import com.finalproject.demo.repository.RoleRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.VerificationTokenRepository;
 import com.finalproject.demo.repository.ViewerRepository;
-import com.finalproject.demo.service.UserService;
+import com.finalproject.demo.service.interfaces.UserService;
 import com.finalproject.demo.utils.SecurityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

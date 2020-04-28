@@ -1,4 +1,4 @@
-package com.finalproject.demo.service;
+package com.finalproject.demo.service.interfaces;
 
 import com.finalproject.demo.entity.User;
 

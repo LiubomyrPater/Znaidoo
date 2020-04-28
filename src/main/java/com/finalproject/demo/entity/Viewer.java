@@ -19,6 +19,9 @@ public class Viewer {
 
     private Set<Device> devices= new HashSet<>();
 
+    @OneToOne(mappedBy = "viewer")
+    private User user;
+
 
 
 }

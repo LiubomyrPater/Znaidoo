@@ -2,7 +2,7 @@ package com.finalproject.demo.controlers;
 
 import com.finalproject.demo.controlers.validator.AdminDeviceValidator;
 import com.finalproject.demo.entity.Device;
-import com.finalproject.demo.service.DeviceService;
+import com.finalproject.demo.service.interfaces.DeviceService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

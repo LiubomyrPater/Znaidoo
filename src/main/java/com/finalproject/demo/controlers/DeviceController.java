@@ -6,7 +6,7 @@ import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
-import com.finalproject.demo.service.DeviceService;
+import com.finalproject.demo.service.interfaces.DeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +46,7 @@ public class DeviceController {
         if (!usersDevices.contains(persistedDevice)){
             return "errorPage";
         }
-            model.addAttribute("persistedDevice", persistedDevice);
+        model.addAttribute("editDeviceForm", persistedDevice);
         return "editDevice";
     }
 

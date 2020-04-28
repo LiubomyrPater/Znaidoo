@@ -36,21 +36,34 @@
 
         <spring:bind path="name">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="name" class="form-control"
-                            placeholder="Name" autofocus="true"></form:input>
+                <form:input type="text" path="name" class="form-control"></form:input>
                 <form:errors path="name"></form:errors>
             </div>
         </spring:bind>
 
         <spring:bind path="periodLink">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="periodLink" class="form-control"
-                            placeholder="Period link"></form:input>
+                <form:input type="text" path="periodLink" class="form-control"></form:input>
                 <form:errors path="periodLink"></form:errors>
             </div>
         </spring:bind>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+
+        <table class="table table-hover table-bordered table-condensed table-striped">
+            <tr>
+                <th>Viewers</th>
+                <tbody>
+                <c:forEach items="${editDeviceForm.viewers}" var="viewers">
+                    <tr>
+                        <td>${viewers.user.username}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+
+            </tr>
+        </table>
         <button class="btn btn-lg btn-primary btn-block" type="button" onclick='window.location.href="setViewer"'>Add Viewer</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick='window.location.href="setViewer"'>Delete Viewer</button>
     </form:form>
 </div>
 

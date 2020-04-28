@@ -2,11 +2,10 @@ package com.finalproject.demo.service.impl;
 
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
-import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.ViewerRepository;
-import com.finalproject.demo.service.DeviceService;
+import com.finalproject.demo.service.interfaces.DeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
