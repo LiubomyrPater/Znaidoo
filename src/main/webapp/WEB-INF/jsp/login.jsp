@@ -30,8 +30,6 @@
 
             <input name="password" type="password" class="form-control" placeholder="Password"/>
 
-            <%--<label><input type="checkbox" name="remember-me">Remember me</label>--%>
-
             <tr>
                 <td>Remember Me:</td>
                 <td><input name="remember-me" type="checkbox" /></td>
@@ -52,14 +50,8 @@
                     onclick='window.location.href = "${contextPath}/registration"'>Sign In</button>
             <button class="btn btn-lg btn-primary btn-danger" type="button"
                     onclick='window.location.href = "${contextPath}/forgottenPassword"'>Forgotten</button>
-
             <button class="btn btn-lg btn-primary btn-block btn-default" type="button"
                     onclick='window.location.href = "demoPage"'>DEMO</button>
-
-
-
-
-
         </div>
     </form>
 </div>

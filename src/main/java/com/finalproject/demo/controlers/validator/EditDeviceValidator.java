@@ -19,13 +19,15 @@ public class EditDeviceValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-/*
+
         Device device = (Device) o;
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "serialNumber", "not.empty", "Not empty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "deviceType", "not.empty","Not empty");
-        if (device.getSerialNumber().length() != 10) {
-            errors.rejectValue("serialNumber", "device.serialNumber.size", "Serial number size must be 10 numbers length!");
-        }*/
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "not.empty","Not empty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "periodLink", "not.empty","Not empty");
+
+        if (device.getPeriodLink() < 5 || device.getPeriodLink() > 1000) {
+            errors.rejectValue("periodLink", "periodLink.size", "Wrong period!");
+        }
 
     }
 

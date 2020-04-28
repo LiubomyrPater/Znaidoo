@@ -43,10 +43,13 @@
 
         <spring:bind path="periodLink">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="periodLink" class="form-control"></form:input>
+                <form:input type="number" min="1" max="1000" path="periodLink" class="form-control"></form:input>
                 <form:errors path="periodLink"></form:errors>
             </div>
         </spring:bind>
+
+        <td>Period link (min-5 max-1,000)</td>
+
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 
         <table class="table table-hover table-bordered table-condensed table-striped">
@@ -54,7 +57,7 @@
                 <th>Another viewers</th>
                 <th width="70"></th>
                 <tbody>
-                <c:forEach items="${editDeviceForm.viewers}" var="viewers">
+                <c:forEach items="${editDeviceForm.viewers}"  var="viewers">
                     <tr>
                         <td>${viewers.user.username}</td>
                         <td><a href="" class="btn btn-danger custom width">Delete</a></td>
