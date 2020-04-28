@@ -22,4 +22,6 @@ public interface DeviceService {
     Set<Device> findDevicesByUser(Principal principal);
 
     Set<Device> findDevicesByViewer(Principal principal);
+
+    void changeDevice(Device device);
 }

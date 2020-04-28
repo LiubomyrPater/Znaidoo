@@ -4,6 +4,7 @@ import com.finalproject.demo.controlers.validator.UserDeviceValidator;
 import com.finalproject.demo.controlers.validator.UserValidator;
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.service.DeviceService;
 import com.finalproject.demo.service.UserService;
 import com.finalproject.demo.service.event.RegisterUserEvent;
@@ -25,22 +26,24 @@ import java.util.Set;
 
 @Controller
 @Slf4j
-public class SimpleUserController {
+public class UserController {
 
     private final UserValidator userValidator;
     private final UserService userService;
     private final ApplicationEventPublisher eventPublisher;
     private final UserDeviceValidator userDeviceValidator;
     private final DeviceService deviceService;
+    private final UserRepository userRepository;
 
-    public SimpleUserController(UserValidator userValidator, UserService userService,
-                                ApplicationEventPublisher eventPublisher,
-                                UserDeviceValidator userDeviceValidator, DeviceService deviceService) {
+    public UserController(UserValidator userValidator, UserService userService,
+                          ApplicationEventPublisher eventPublisher,
+                          UserDeviceValidator userDeviceValidator, DeviceService deviceService, UserRepository userRepository) {
         this.userValidator = userValidator;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
         this.userDeviceValidator = userDeviceValidator;
         this.deviceService = deviceService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/login")
@@ -84,6 +87,7 @@ public class SimpleUserController {
     public String home(Model model, Principal principal) {
         model.addAttribute("message", "Hello from controller");
         Set<Device> viewerDevices = deviceService.findDevicesByViewer(principal);
+        model.addAttribute("username",principal.getName());
         model.addAttribute("devices", viewerDevices);
         return "home";
     }

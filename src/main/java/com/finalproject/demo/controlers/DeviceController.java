@@ -1,17 +1,18 @@
 package com.finalproject.demo.controlers;
 
+import com.finalproject.demo.controlers.validator.EditDeviceValidator;
 import com.finalproject.demo.controlers.validator.SimpleUserValidator;
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.repository.DeviceRepository;
+import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.service.DeviceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.Set;
 
@@ -21,11 +22,52 @@ public class DeviceController {
 
     private final DeviceService deviceService;
     private final SimpleUserValidator simpleUserValidator;
+    private final DeviceRepository deviceRepository;
+    private final UserRepository userRepository;
+    private final EditDeviceValidator editDeviceValidator;
 
-    public DeviceController(DeviceService deviceService, SimpleUserValidator simpleUserValidator) {
+
+
+    public DeviceController(DeviceService deviceService, SimpleUserValidator simpleUserValidator, DeviceRepository deviceRepository, UserRepository userRepository, EditDeviceValidator editDeviceValidator) {
         this.deviceService = deviceService;
         this.simpleUserValidator = simpleUserValidator;
+        this.deviceRepository = deviceRepository;
+        this.userRepository = userRepository;
+        this.editDeviceValidator = editDeviceValidator;
     }
+
+    @GetMapping("/editDevice")
+    public String getEditDevicePage(@RequestParam("deviceSN") String sn,
+                                    @ModelAttribute("editDeviceForm") Device device,
+                                    Principal principal, Model model) {
+
+        Set<Device> usersDevices = userRepository.findByUsername(principal.getName()).get().getDevice();
+        Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn).get();
+        if (!usersDevices.contains(persistedDevice)){
+            return "errorPage";
+        }
+            model.addAttribute("persistedDevice", persistedDevice);
+        return "editDevice";
+    }
+
+
+
+    @PostMapping("/editDevice")
+    public String editDevice(@ModelAttribute("editDeviceForm") Device device, BindingResult bindingResult) {
+
+        editDeviceValidator.validate(device, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return "editDevice";
+        }
+        deviceService.changeDevice(device);
+        return "redirect:home";
+    }
+
+
+
+
+
+
 
 
     @GetMapping("/setViewer")
@@ -33,7 +75,6 @@ public class DeviceController {
         model.addAttribute("addViewerForm", new User());
         return "setViewer";
     }
-
 
 
     @PostMapping("/setViewer")
@@ -52,16 +93,5 @@ public class DeviceController {
 
         return "redirect:home";
     }
-
-
-/*
-    //не використовується
-    @GetMapping("devices")
-    public @ResponseBody Set<Device> setDevices (Principal principal, Model model){
-        Set<Device> devices = deviceService.findDevicesByUser(principal);
-        model.addAttribute("devices", devices);
-        return devices;
-    }*/
-
 
 }

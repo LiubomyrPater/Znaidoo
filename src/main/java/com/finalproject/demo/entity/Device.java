@@ -2,10 +2,7 @@ package com.finalproject.demo.entity;
 
 import com.finalproject.demo.config.ApplicationProperties;
 import com.finalproject.demo.entity.enumerations.DeviceType;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
@@ -15,7 +12,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 
 @Entity

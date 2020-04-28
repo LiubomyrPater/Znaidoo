@@ -12,14 +12,12 @@
     <script src="${contextPath}/resources/js/other_script.js"></script>
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-
     <style>
         #map {
             width: 100%;
             height: 500px;
         }
     </style>
-
     <style>
         .layer1{
             position: relative;
@@ -32,14 +30,9 @@
             opacity: 0.6;
         }
     </style>
-
 </head>
-
-
-
 <body>
 <div class="text-center" role="toolbar" aria-label="Toolbar with buttons">
-
 
     <a class="btn btn-lg" onclick='window.location.href="account"'><spring:message code="home.account"/></a>
     <a class="btn btn-lg" onclick='window.location.href="help"'><spring:message code="home.help"/></a>
@@ -49,15 +42,12 @@
         <form id="logoutForm" method="POST" action="${contextPath}/logout"></form>
     </c:if>
 
-
 </div>
-
 
 
 <div class="layer1">
     <button class="btn btn-default" id="devices-container-button" onclick="show_hide_elem('devices-container')" >
         <spring:message code="home.devices"/></button>
-
 
     <div class="layer2" id="map">
         <script type="text/javascript">
@@ -81,7 +71,7 @@
                     <th><spring:message code="home.timeLinkDevice"/></th>
                     <th><spring:message code="home.batteryDevice"/></th>
                     <th><spring:message code="home.visibleDevice"/></th>
-                    <th>Owner</th>
+                    <th><spring:message code="home.ownerDevice"/></th>
                     <th width="70"></th>
                 </tr>
 
@@ -94,7 +84,10 @@
                         <td>${device.battery}</td>
                         <td><input type="checkbox"></td>
                         <td>${device.user.username}</td>
-                        <td><a href="<c:url value='/${contextPath}/editDevice'/>" class="btn btn-success custom width">Edit</a></td>
+                        <c:if test="${device.user.username.equals(pageContext.findAttribute('username'))}">
+                        <td><a href="<c:url value='editDevice?deviceSN=${device.serialNumber}'/>" class="btn btn-success custom width">
+                            <spring:message code="home.editDevice"/></a></td>
+                        </c:if>
                     </tr>
                 </c:forEach>
                 </tbody>

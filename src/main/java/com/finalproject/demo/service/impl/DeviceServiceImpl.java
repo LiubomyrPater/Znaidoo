@@ -89,6 +89,17 @@ public class DeviceServiceImpl implements DeviceService {
 
 
     @Override
+    public void changeDevice(Device device) {
+        Device persistedDevice = deviceRepository.findDeviceBySerialNumber(device.getSerialNumber())
+                .orElseThrow(() -> new EntityNotFoundException("device with id " + device.getSerialNumber() + " was not found"));
+
+        persistedDevice.setName(device.getName());
+        persistedDevice.setPeriodLink(device.getPeriodLink());
+        deviceRepository.save(persistedDevice);
+
+    }
+
+    @Override
     public void addViewerToDevice(String username, String serialNumber) {
 
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(serialNumber)
