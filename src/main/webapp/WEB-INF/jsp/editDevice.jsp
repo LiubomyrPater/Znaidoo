@@ -51,11 +51,13 @@
 
         <table class="table table-hover table-bordered table-condensed table-striped">
             <tr>
-                <th>Viewers</th>
+                <th>Another viewers</th>
+                <th width="70"></th>
                 <tbody>
                 <c:forEach items="${editDeviceForm.viewers}" var="viewers">
                     <tr>
                         <td>${viewers.user.username}</td>
+                        <td><a href="" class="btn btn-danger custom width">Delete</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -63,7 +65,7 @@
             </tr>
         </table>
         <button class="btn btn-lg btn-primary btn-block" type="button" onclick='window.location.href="setViewer"'>Add Viewer</button>
-        <button class="btn btn-lg btn-primary btn-block" type="button" onclick='window.location.href="setViewer"'>Delete Viewer</button>
+
     </form:form>
 </div>
 
