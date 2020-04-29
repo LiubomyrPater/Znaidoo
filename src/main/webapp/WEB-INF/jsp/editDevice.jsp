@@ -67,7 +67,9 @@
 
             </tr>
         </table>
-        <button class="btn btn-lg btn-primary btn-block" type="button" onclick='window.location.href="setViewer"'>Add Viewer</button>
+
+        <button class="btn btn-lg btn-warning btn-block" type="button"
+                onclick='window.location.href="setViewer?deviceSN=${editDeviceForm.serialNumber}"'>Add Viewer</button>
 
     </form:form>
 </div>

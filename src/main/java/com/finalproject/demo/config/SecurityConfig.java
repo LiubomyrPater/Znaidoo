@@ -55,9 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/resources/**",
                         "/registration",
                         "/confirmRegistration",
-                        "/success.jsp","/demoPage",
+                        "/success",
+                        "/demoPage",
                         "/forgottenPassword",
-                        "/setViewer",
                         "/admin/**")
                 .permitAll()
                 .anyRequest().authenticated()

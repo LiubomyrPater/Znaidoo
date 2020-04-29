@@ -25,12 +25,11 @@ public class SimpleUserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-
         User user = (User) o;
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "not.empty","Not empty");
+        /*log.info(user.getUsername()+ "validator");
+        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "not.empty","Not empty");
 
         if (!userRepository.existsByUsername(user.getUsername()))
-            errors.rejectValue("username", "user.notExist", "User not exist!");
+            errors.rejectValue("username", "user.notExist", "User not exist!");*/
     }
 }

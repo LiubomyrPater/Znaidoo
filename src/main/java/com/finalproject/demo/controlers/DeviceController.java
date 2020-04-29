@@ -67,26 +67,40 @@ public class DeviceController {
 
 
 
-
-
-
     @GetMapping("/setViewer")
-    public String getUserAddDevicePage(Model model) {
+    public String getUserAddDevicePage(@RequestParam("deviceSN") String sn,
+                                       Principal principal,
+                                       Model model) {
+        log.info("get deviceSN " + sn);
+        Set<Device> usersDevices = userRepository.findByUsername(principal.getName()).get().getDevice();
+        Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn).get();
+        if (!usersDevices.contains(persistedDevice)){
+            return "errorPage";
+        }
         model.addAttribute("addViewerForm", new User());
         return "setViewer";
     }
 
 
+
+
+
     @PostMapping("/setViewer")
-    public String registration(@ModelAttribute("addViewerForm") User user,
+    public String setViewerFormPost(@ModelAttribute("addViewerForm") User user,
+                               @ModelAttribute("deviceSN") String sn,
                                BindingResult bindingResult, Principal principal, Model model) {
+        log.info("post deviceSN " + sn);
+        log.info(user.getUsername());
 
-        simpleUserValidator.validate(user,bindingResult);
-
-        if (bindingResult.hasErrors())
+        if (!userRepository.findByUsername(user.getUsername()).isPresent())
             return "setViewer";
 
-        deviceService.addViewerToDevice(user.getUsername(), "4444444444");
+        /**Не розумію чому не працює simpleUserValidator
+        simpleUserValidator.validate(user,bindingResult);
+        if (bindingResult.hasErrors())
+            return "setViewer";*/
+
+        deviceService.addViewerToDevice(user.getUsername(), sn);
 
         Set<Device> devices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", devices);
