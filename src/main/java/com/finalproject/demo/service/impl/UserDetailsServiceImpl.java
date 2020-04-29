@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -20,6 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         return userRepository.findByUsername(name).orElseThrow(
-                () -> new UsernameNotFoundException("Not found userView with name " + name));
+                () -> new UsernameNotFoundException("Not found user with name " + name));
     }
 }

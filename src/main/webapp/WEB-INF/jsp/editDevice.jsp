@@ -57,10 +57,10 @@
                 <th>Another viewers</th>
                 <th width="70"></th>
                 <tbody>
-                <c:forEach items="${editDeviceForm.viewers}"  var="viewers">
+                <c:forEach items="${viewers.viewers}"  var="viewers">
                     <tr>
                         <td>${viewers.user.username}</td>
-                        <td><a href="" class="btn btn-danger custom width">Delete</a></td>
+                        <td><a href=""  class="btn btn-danger custom width">Delete</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>

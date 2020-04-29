@@ -34,7 +34,7 @@
 <body>
 <div class="text-center" role="toolbar" aria-label="Toolbar with buttons">
 
-    <a class="btn btn-lg" onclick='window.location.href="account"'><spring:message code="home.account"/></a>
+    <a class="btn btn-lg" href="<c:url value='/account?username=${username}'/>"><spring:message code="home.account"/></a>
     <a class="btn btn-lg" onclick='window.location.href="help"'><spring:message code="home.help"/></a>
     <script async defer src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
     <a class="btn btn-lg" onclick="document.forms['logoutForm'].submit()"><spring:message code="home.logout"/></a>

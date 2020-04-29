@@ -4,6 +4,7 @@ import com.finalproject.demo.controlers.validator.EditDeviceValidator;
 import com.finalproject.demo.controlers.validator.SimpleUserValidator;
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.service.interfaces.DeviceService;
@@ -36,6 +37,7 @@ public class DeviceController {
         this.editDeviceValidator = editDeviceValidator;
     }
 
+
     @GetMapping("/editDevice")
     public String getEditDevicePage(@RequestParam("deviceSN") String sn,
                                     @ModelAttribute("editDeviceForm") Device device,
@@ -43,28 +45,22 @@ public class DeviceController {
 
         Set<Device> usersDevices = userRepository.findByUsername(principal.getName()).get().getDevice();
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn).get();
-        if (!usersDevices.contains(persistedDevice)){
+        if (!usersDevices.contains(persistedDevice))
             return "errorPage";
-        }
         model.addAttribute("editDeviceForm", persistedDevice);
+        persistedDevice.getViewers().remove(userRepository.findByUsername(principal.getName()).get().getViewer());
+        model.addAttribute("viewers", persistedDevice);
         return "editDevice";
     }
 
-
-
     @PostMapping("/editDevice")
     public String editDevice(@ModelAttribute("editDeviceForm") Device device, BindingResult bindingResult) {
-
         editDeviceValidator.validate(device, bindingResult);
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors())
             return "editDevice";
-        }
         deviceService.changeDevice(device);
         return "redirect:home";
     }
-
-
-
 
 
     @GetMapping("/setViewer")
@@ -80,7 +76,6 @@ public class DeviceController {
         model.addAttribute("addViewerForm", new User());
         return "setViewer";
     }
-
 
 
 
@@ -107,5 +102,15 @@ public class DeviceController {
 
         return "redirect:home";
     }
+
+/** Не встигаю
+    @DeleteMapping("/editDevice/{id}")
+    public void deleteViewer(@PathVariable Long id,
+                             @ModelAttribute("deviceSN") String deviceSN,
+                             Principal principal){
+
+        deviceService.deleteViewer(deviceSN, id);
+    }*/
+
 
 }

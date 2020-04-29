@@ -12,4 +12,6 @@ public interface UserService {
 
     Long findUserCurrentId();
 
+    void changeUser(User user);
+
 }

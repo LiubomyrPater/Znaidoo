@@ -28,8 +28,6 @@
 <div class="container">
 
 
-
-
     <form:form method="POST" modelAttribute="addViewerForm" class="form-signin">
 
 

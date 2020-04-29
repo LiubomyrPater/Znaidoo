@@ -2,6 +2,7 @@ package com.finalproject.demo.service.impl;
 
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.ViewerRepository;
@@ -26,6 +27,19 @@ public class DeviceServiceImpl implements DeviceService {
         this.deviceRepository = deviceRepository;
         this.userRepository = userRepository;
         this.viewerRepository = viewerRepository;
+    }
+
+    @Override
+    public void deleteViewer(String sn, Long id) {
+        Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn)
+                .orElseThrow(() -> new EntityNotFoundException("device with id " + sn + " was not found"));
+
+        Viewer persistedViewer = viewerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Viewer with id " + sn + " was not found"));
+
+        persistedDevice.getViewers().remove(persistedViewer);
+
+        deviceRepository.save(persistedDevice);
     }
 
     @Override
@@ -73,17 +87,7 @@ public class DeviceServiceImpl implements DeviceService {
                 .getId();
         Set<Device> deviceByViewers = deviceRepository.findDeviceByViewers(viewerId
         );
-
         return deviceByViewers;
-
-
-        /*
-        return viewerRepository.findViewersDevices(userRepository
-                .findByUsername(principal.getName())
-                .get()
-                .getViewer()
-                .getId()
-        );*/
     }
 
 
@@ -91,11 +95,9 @@ public class DeviceServiceImpl implements DeviceService {
     public void changeDevice(Device device) {
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(device.getSerialNumber())
                 .orElseThrow(() -> new EntityNotFoundException("device with id " + device.getSerialNumber() + " was not found"));
-
         persistedDevice.setName(device.getName());
         persistedDevice.setPeriodLink(device.getPeriodLink());
         deviceRepository.save(persistedDevice);
-
     }
 
     @Override

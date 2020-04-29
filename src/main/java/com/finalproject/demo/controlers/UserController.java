@@ -1,5 +1,6 @@
 package com.finalproject.demo.controlers;
 
+import com.finalproject.demo.controlers.validator.ChangeUserValidator;
 import com.finalproject.demo.controlers.validator.UserDeviceValidator;
 import com.finalproject.demo.controlers.validator.UserValidator;
 import com.finalproject.demo.entity.Device;
@@ -34,16 +35,18 @@ public class UserController {
     private final UserDeviceValidator userDeviceValidator;
     private final DeviceService deviceService;
     private final UserRepository userRepository;
+    private final ChangeUserValidator changeUserValidator;
 
     public UserController(UserValidator userValidator, UserService userService,
                           ApplicationEventPublisher eventPublisher,
-                          UserDeviceValidator userDeviceValidator, DeviceService deviceService, UserRepository userRepository) {
+                          UserDeviceValidator userDeviceValidator, DeviceService deviceService, UserRepository userRepository, ChangeUserValidator changeUserValidator) {
         this.userValidator = userValidator;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
         this.userDeviceValidator = userDeviceValidator;
         this.deviceService = deviceService;
         this.userRepository = userRepository;
+        this.changeUserValidator = changeUserValidator;
     }
 
     @GetMapping("/login")
@@ -68,10 +71,39 @@ public class UserController {
         return "forgottenPass";
     }
 
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/account")
-    public String getAccountPage() {
+    public String getAccountPage(@RequestParam("username") String username,
+                                 @ModelAttribute("changeForm") User User,
+                                 Principal principal, Model model) {
+        if (!principal.getName().equals(username))
+            return "errorPage";
+        User persistedUser = userRepository.findByUsername(username).get();
+        model.addAttribute("changeForm", persistedUser);
         return "account";
     }
+
+
+    @PostMapping("/account")
+    public String postAccountPage(@ModelAttribute("changeForm") User user,
+                                  BindingResult bindingResult) {
+        changeUserValidator.validate(user, bindingResult);
+        if (bindingResult.hasErrors())
+            return "account";
+        userService.changeUser(user);
+        return "redirect:home";
+    }
+
 
     @GetMapping("/help")
     public String getHelpPage() {

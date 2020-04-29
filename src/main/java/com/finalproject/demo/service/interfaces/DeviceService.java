@@ -24,4 +24,6 @@ public interface DeviceService {
     Set<Device> findDevicesByViewer(Principal principal);
 
     void changeDevice(Device device);
+
+    void deleteViewer(String SN, Long id);
 }

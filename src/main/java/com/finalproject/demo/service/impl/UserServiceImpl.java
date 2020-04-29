@@ -1,5 +1,6 @@
 package com.finalproject.demo.service.impl;
 
+import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.entity.VerificationToken;
 import com.finalproject.demo.entity.Viewer;
@@ -13,6 +14,7 @@ import com.finalproject.demo.utils.SecurityUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -37,15 +39,6 @@ public class UserServiceImpl implements UserService {
         this.tokenRepository = tokenRepository;
         this.viewerRepository = viewerRepository;
     }
-
-/*
-    @Override
-    public User save(User userView){
-        userView.getRole().add(roleRepository.findByName("ROLE_USER"));
-        userView.setPassword(bCryptPasswordEncoder.encode(userView.getPassword()));
-        return userRepository.save(userView);
-    }
-*/
 
 
     @Override
@@ -72,18 +65,26 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException();
         }
 
-
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.getRole().add(roleRepository.findByName("ROLE_USER"));
 
-
         user.setViewer(viewerRepository.save(new Viewer()));
         userRepository.save(user);
-
     }
 
     @Override
     public Long findUserCurrentId() {
         return userRepository.findByUsername(SecurityUtils.getCurrentUserName()).get().getId();
+    }
+
+    @Override
+    public void changeUser(User user) {
+        User persistedUser = userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("useer with id " + user.getUsername() + " was not found"));
+        persistedUser.setEmail(user.getEmail());
+        persistedUser.setPhoneNumber(user.getPhoneNumber());
+        persistedUser.setCountry(user.getCountry());
+        persistedUser.setLanguage(user.getLanguage());
+        userRepository.save(persistedUser);
     }
 }
