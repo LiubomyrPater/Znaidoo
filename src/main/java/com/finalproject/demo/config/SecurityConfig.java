@@ -1,3 +1,4 @@
+/*
 package com.finalproject.demo.config;
 
 import org.springframework.context.annotation.Bean;
@@ -17,13 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers("/resources/**",
-                        "/registration",
-                        "/confirmRegistration",
-                        "/success",
-                        "/demoPage",
-                        "/forgottenPassword",
-                        "/admin/**")
+                .antMatchers("////////////////////////////////////")
                 .permitAll()
                 .anyRequest().authenticated()
 
@@ -36,15 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .permitAll()
-
-
-
-
-                .deleteCookies("JSESSIONID")
-                .and()
-                .rememberMe()
-                .key("uniqueAndSecret")
-                .tokenValiditySeconds(86400)
         ;
     }
 }
+*/

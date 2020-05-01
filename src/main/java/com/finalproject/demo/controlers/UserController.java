@@ -49,8 +49,26 @@ public class UserController {
         this.changeUserValidator = changeUserValidator;
     }
 
+    @GetMapping
+    public String basePage(Principal principal) {
+
+        if(principal != null){
+            if (userRepository.findByUsername(principal.getName()).get().getRole()
+                    .iterator()
+                    .next()
+                    .getName()
+                    .equals("ROLE_ADMIN"))
+                return "redirect:admin";
+            else
+                return "redirect:home";
+        }
+        return "login";
+    }
+
     @GetMapping("/login")
-    public String getLoginPage() {
+    public String getLoginPage(Principal principal) {
+        if(principal != null)
+            return "redirect:/home";
         return "login";
     }
 
@@ -61,7 +79,7 @@ public class UserController {
     }
 
     @GetMapping("/confirmRegistration")
-    public String confirmRegistration(@RequestParam String token) {
+    public String confirmRegistration(@RequestParam("token") String token) {
         userService.confirmRegistration(token);
         return "redirect:/login";
     }
@@ -70,16 +88,6 @@ public class UserController {
     public String getForgottenPassword() {
         return "forgottenPass";
     }
-
-
-
-
-
-
-
-
-
-
 
 
     @GetMapping("/account")
@@ -115,12 +123,32 @@ public class UserController {
         return "demoPage";
     }
 
-    @GetMapping({"/home", "/"})
-    public String home(Model model, Principal principal) {
+
+    @GetMapping("/default")
+    public String getDefaultPage(Principal principal) {
+
+        if (userRepository.findByUsername(principal.getName())
+                .get()
+                .getRole()
+                .iterator()
+                .next()
+                .getName()
+                .equals("ROLE_ADMIN"))
+            return "redirect:admin";
+        else
+            return "redirect:home";
+    }
+
+
+
+    @GetMapping("/home")
+    public String getHomePage(Model model, Principal principal) {
         model.addAttribute("message", "Hello from controller");
         Set<Device> viewerDevices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("username",principal.getName());
         model.addAttribute("devices", viewerDevices);
+
+        log.info(userRepository.findByUsername(principal.getName()).get().getRole().toString());
         return "home";
     }
 

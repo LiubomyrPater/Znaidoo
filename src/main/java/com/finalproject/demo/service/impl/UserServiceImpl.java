@@ -1,6 +1,5 @@
 package com.finalproject.demo.service.impl;
 
-import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.entity.VerificationToken;
 import com.finalproject.demo.entity.Viewer;
@@ -11,6 +10,7 @@ import com.finalproject.demo.repository.VerificationTokenRepository;
 import com.finalproject.demo.repository.ViewerRepository;
 import com.finalproject.demo.service.interfaces.UserService;
 import com.finalproject.demo.utils.SecurityUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +19,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -29,17 +30,18 @@ public class UserServiceImpl implements UserService {
 
 
 
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           BCryptPasswordEncoder bCryptPasswordEncoder,
-                           VerificationTokenRepository tokenRepository, ViewerRepository viewerRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.tokenRepository = tokenRepository;
-        this.viewerRepository = viewerRepository;
+    @Override
+    public void registerNewUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())
+                || userRepository.existsByPhoneNumber(user.getPhoneNumber())
+                || userRepository.existsByUsername(user.getUsername())) {
+            throw new UserAlreadyExistException();
+        }
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.getRole().add(roleRepository.findByName("ROLE_USER"));
+        user.setViewer(viewerRepository.save(new Viewer()));
+        userRepository.save(user);
     }
-
 
     @Override
     public void confirmRegistration(String token) {
@@ -49,33 +51,17 @@ public class UserServiceImpl implements UserService {
             user.setEnabled(true);
             userRepository.save(user);
         }
-
     }
 
     private boolean tokenIsValid(VerificationToken token) {
         return Duration.between(token.getExpiredDate(), Instant.now()).isNegative();
     }
 
-
-    @Override
-    public void registerNewUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())
-                || userRepository.existsByPhoneNumber(user.getPhoneNumber())
-                || userRepository.existsByUsername(user.getUsername())) {
-            throw new UserAlreadyExistException();
-        }
-
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.getRole().add(roleRepository.findByName("ROLE_USER"));
-
-        user.setViewer(viewerRepository.save(new Viewer()));
-        userRepository.save(user);
-    }
-
     @Override
     public Long findUserCurrentId() {
         return userRepository.findByUsername(SecurityUtils.getCurrentUserName()).get().getId();
     }
+
 
     @Override
     public void changeUser(User user) {
