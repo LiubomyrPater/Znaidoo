@@ -1,6 +1,6 @@
 package com.finalproject.demo.entity;
 
-import com.finalproject.demo.entity.enumerations.DeviceStatus;
+import com.finalproject.demo.entity.valueObjects.enumerations.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 
 @Entity
-public class DeviceHistory {
+public class DeviceState {
 
     @Id
     @GeneratedValue
     private Integer id;
 
     @Enumerated(value = EnumType.STRING)
-    private DeviceStatus deviceStatus;
+    private Status status;
 
     private Integer batteryRate;
 

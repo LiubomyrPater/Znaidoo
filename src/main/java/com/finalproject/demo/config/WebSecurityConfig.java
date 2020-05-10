@@ -15,10 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final ApplicationProperties applicationProperties;
 
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService) {
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, ApplicationProperties applicationProperties) {
         this.userDetailsService = userDetailsService;
+        this.applicationProperties = applicationProperties;
     }
 
     @Bean
@@ -65,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .rememberMe()
                 .key("uniqueAndSecret")
-                .tokenValiditySeconds(86400)
+                .tokenValiditySeconds(applicationProperties.getTokenValiditySeconds())
 
         ;
     }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Getter
-@Setter
 
 @Component
 public class ApplicationProperties {
@@ -16,6 +15,9 @@ public class ApplicationProperties {
 
     @Value("${demo.config.ApplicationProperties.passwordLength}")
     private int passwordLength;
+
+    @Value("${demo.config.ApplicationProperties.tokenValiditySeconds}")
+    private int tokenValiditySeconds;
 
 
 }

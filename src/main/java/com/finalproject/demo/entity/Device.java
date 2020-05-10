@@ -1,9 +1,7 @@
 package com.finalproject.demo.entity;
 
-import com.finalproject.demo.config.ApplicationProperties;
-import com.finalproject.demo.entity.enumerations.DeviceType;
+import com.finalproject.demo.entity.valueObjects.enumerations.Type;
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -23,7 +21,7 @@ public class Device {
     private Long id;
 
     @Enumerated(value = EnumType.STRING)
-    private DeviceType deviceType;
+    private Type type;
 
     @Column(unique = true)
     private String serialNumber;
@@ -45,7 +43,7 @@ public class Device {
 
     @OneToMany
     @JoinColumn(name = "device_id")
-    private Set<DeviceHistory> deviceHistory = new HashSet<>();
+    private Set<DeviceState> deviceState = new HashSet<>();
 
 
 }

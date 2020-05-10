@@ -34,12 +34,12 @@
                 <form:errors path="serialNumber"></form:errors>
             </div>
         </spring:bind>
-        <spring:bind path="deviceType">
+        <spring:bind path="type">
             <div class="form-group ${status.error ? 'has-error' : ''}" >
-                <form:select type="text" path="deviceType" class="form-control">
+                <form:select type="text" path="type" class="form-control">
                     <form:options items="${type}"/>
                 </form:select>
-                <form:errors path="deviceType"></form:errors>
+                <form:errors path="type"></form:errors>
             </div>
         </spring:bind>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>

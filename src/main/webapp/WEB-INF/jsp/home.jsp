@@ -78,7 +78,7 @@
                 <tbody>
                 <c:forEach items="${devices}" var="device">
                     <tr>
-                        <td>${device.deviceType}</td>
+                        <td>${device.type}</td>
                         <td>${device.name}</td>
                         <td>${device.periodLink}</td>
                         <td>${device.battery}</td>
