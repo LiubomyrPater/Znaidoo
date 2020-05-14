@@ -3,12 +3,15 @@ package com.finalproject.demo.controlers;
 import com.finalproject.demo.controlers.validator.ChangeUserValidator;
 import com.finalproject.demo.controlers.validator.UserDeviceValidator;
 import com.finalproject.demo.controlers.validator.UserValidator;
-import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.repository.RoleRepository;
 import com.finalproject.demo.repository.UserRepository;
+import com.finalproject.demo.service.dto.DeviceDTO;
+import com.finalproject.demo.service.dto.UserDTO;
 import com.finalproject.demo.service.interfaces.DeviceService;
 import com.finalproject.demo.service.interfaces.UserService;
 import com.finalproject.demo.service.event.RegisterUserEvent;
+import com.finalproject.demo.service.mapper.UserMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,10 +39,17 @@ public class UserController {
     private final DeviceService deviceService;
     private final UserRepository userRepository;
     private final ChangeUserValidator changeUserValidator;
+    private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
 
     public UserController(UserValidator userValidator, UserService userService,
                           ApplicationEventPublisher eventPublisher,
-                          UserDeviceValidator userDeviceValidator, DeviceService deviceService, UserRepository userRepository, ChangeUserValidator changeUserValidator) {
+                          UserDeviceValidator userDeviceValidator,
+                          DeviceService deviceService,
+                          UserRepository userRepository,
+                          ChangeUserValidator changeUserValidator,
+                          RoleRepository roleRepository,
+                          UserMapper userMapper) {
         this.userValidator = userValidator;
         this.userService = userService;
         this.eventPublisher = eventPublisher;
@@ -47,17 +57,19 @@ public class UserController {
         this.deviceService = deviceService;
         this.userRepository = userRepository;
         this.changeUserValidator = changeUserValidator;
+        this.roleRepository = roleRepository;
+        this.userMapper = userMapper;
     }
 
     @GetMapping
-    public String basePage(Principal principal) {
-
+    public String basePage(Principal principal)
+    {
         if(principal != null){
-            if (userRepository.findByUsername(principal.getName()).get().getRole()
-                    .iterator()
-                    .next()
-                    .getName()
-                    .equals("ROLE_ADMIN"))
+            if (userRepository.findByUsername(principal.getName())
+                    .get()
+                    .getRole()
+                    .contains(roleRepository.findByName("ROLE_ADMIN"))
+                    )
                 return "redirect:admin";
             else
                 return "redirect:home";
@@ -74,7 +86,7 @@ public class UserController {
 
     @GetMapping("/registration")
     public String registrationPage(Model model) {
-        model.addAttribute("userForm", new User());
+        model.addAttribute("userForm", new UserDTO());
         return "registration";
     }
 
@@ -92,23 +104,24 @@ public class UserController {
 
     @GetMapping("/account")
     public String getAccountPage(@RequestParam("username") String username,
-                                 @ModelAttribute("changeForm") User User,
-                                 Principal principal, Model model) {
+                                 @ModelAttribute("changeForm") UserDTO userDTO,
+                                 Principal principal,
+                                 Model model){
         if (!principal.getName().equals(username))
             return "errorPage";
-        User persistedUser = userRepository.findByUsername(username).get();
-        model.addAttribute("changeForm", persistedUser);
+        UserDTO persistedUserDTO = userMapper.toDTO(userRepository.findByUsername(username).get());
+        model.addAttribute("changeForm", persistedUserDTO);
         return "account";
     }
 
 
     @PostMapping("/account")
-    public String postAccountPage(@ModelAttribute("changeForm") User user,
+    public String postAccountPage(@ModelAttribute("changeForm") UserDTO userDTO,
                                   BindingResult bindingResult) {
-        changeUserValidator.validate(user, bindingResult);
+        changeUserValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors())
             return "account";
-        userService.changeUser(user);
+        userService.changeUser(userDTO);
         return "redirect:home";
     }
 
@@ -126,14 +139,11 @@ public class UserController {
 
     @GetMapping("/default")
     public String getDefaultPage(Principal principal) {
-
         if (userRepository.findByUsername(principal.getName())
                 .get()
                 .getRole()
-                .iterator()
-                .next()
-                .getName()
-                .equals("ROLE_ADMIN"))
+                .contains(roleRepository.findByName("ROLE_ADMIN"))
+                )
             return "redirect:admin";
         else
             return "redirect:home";
@@ -142,48 +152,50 @@ public class UserController {
 
 
     @GetMapping("/home")
-    public String getHomePage(Model model, Principal principal) {
+    public String getHomePage(Model model,
+                              Principal principal)
+    {
         model.addAttribute("message", "Hello from controller");
-        Set<Device> viewerDevices = deviceService.findDevicesByViewer(principal);
-        model.addAttribute("username",principal.getName());
+        Set<DeviceDTO> viewerDevices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", viewerDevices);
-
-        log.info(userRepository.findByUsername(principal.getName()).get().getRole().toString());
+        model.addAttribute("username",principal.getName());
         return "home";
     }
 
     @GetMapping("/userAddDevice")
     public String getUserAddDevicePage(Model model) {
-        model.addAttribute("userAddDeviceForm", new Device());
+        model.addAttribute("userAddDeviceForm", new DeviceDTO());
         return "userAddDevice";
     }
 
 
     @PostMapping("/registration")
-    public String registration( @ModelAttribute("userForm") User user,
-                                HttpServletRequest request, BindingResult bindingResult) {
-
-        userValidator.validate(user, bindingResult);
+    public String registration( @ModelAttribute("userForm") UserDTO userDTO,
+                                HttpServletRequest request,
+                                BindingResult bindingResult)
+    {
+        userValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        userService.registerNewUser(user);
+        User user = userService.registerNewUser(userDTO);
         eventPublisher.publishEvent(new RegisterUserEvent(this, user, request.getContextPath()));
         return "success";
     }
 
 
     @PostMapping("/userAddDevice")
-    public String registration(@ModelAttribute("userAddDeviceForm") Device device,
-                               BindingResult bindingResult, Principal principal, Model model) {
-
-        userDeviceValidator.validate(device, bindingResult);
+    public String registration(@ModelAttribute("userAddDeviceForm") DeviceDTO deviceDTO,
+                               BindingResult bindingResult,
+                               Principal principal,
+                               Model model) {
+        userDeviceValidator.validate(deviceDTO, bindingResult);
         if (bindingResult.hasErrors())
             return "userAddDevice";
 
-        deviceService.connectDeviceToUser(device, principal);
+        deviceService.connectDeviceToUser(deviceDTO, principal);
 
-        Set<Device> viewerDevices = deviceService.findDevicesByViewer(principal);
+        Set<DeviceDTO> viewerDevices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", viewerDevices);
         return "redirect:home";
     }

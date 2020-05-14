@@ -1,7 +1,7 @@
 package com.finalproject.demo.service.dto;
 
 import com.finalproject.demo.entity.Device;
-import com.finalproject.demo.entity.Role;
+import com.finalproject.demo.entity.valueObjects.Role;
 import com.finalproject.demo.entity.Viewer;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,8 +16,6 @@ import java.util.Set;
 @EqualsAndHashCode
 public class UserDTO {
 
-    private Long id;
-
     private String username;
 
     private String password;
@@ -31,8 +29,6 @@ public class UserDTO {
     private String country;
 
     private String language;
-
-    private boolean enabled;
 
     private Viewer viewer;
 

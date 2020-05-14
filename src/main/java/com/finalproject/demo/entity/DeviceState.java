@@ -1,6 +1,6 @@
 package com.finalproject.demo.entity;
 
-import com.finalproject.demo.entity.valueObjects.enumerations.Status;
+import com.finalproject.demo.entity.valueObjects.Status;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +22,7 @@ public class DeviceState {
     @GeneratedValue
     private Integer id;
 
-    @Enumerated(value = EnumType.STRING)
+    @ManyToOne
     private Status status;
 
     private Integer batteryRate;

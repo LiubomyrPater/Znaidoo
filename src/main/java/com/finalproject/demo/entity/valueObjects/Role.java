@@ -1,9 +1,10 @@
-package com.finalproject.demo.entity;
+package com.finalproject.demo.entity.valueObjects;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @UniqueElements
     private String name;
 
     @Override

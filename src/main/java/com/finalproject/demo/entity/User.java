@@ -1,5 +1,6 @@
 package com.finalproject.demo.entity;
 
+import com.finalproject.demo.entity.valueObjects.Role;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

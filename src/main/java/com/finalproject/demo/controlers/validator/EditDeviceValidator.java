@@ -1,6 +1,7 @@
 package com.finalproject.demo.controlers.validator;
 
 import com.finalproject.demo.entity.Device;
+import com.finalproject.demo.service.dto.DeviceDTO;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -14,18 +15,18 @@ public class EditDeviceValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return Device.class.equals(aClass);
+        return DeviceDTO.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
 
-        Device device = (Device) o;
+        DeviceDTO deviceDTO = (DeviceDTO) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "not.empty","Not empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "periodLink", "not.empty","Not empty");
 
-        if (device.getPeriodLink() < 5 || device.getPeriodLink() > 1000) {
+        if (deviceDTO.getPeriodLink() < 5 || deviceDTO.getPeriodLink() > 1000) {
             errors.rejectValue("periodLink", "periodLink.size", "Wrong period!");
         }
 

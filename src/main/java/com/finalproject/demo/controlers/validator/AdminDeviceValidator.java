@@ -1,6 +1,7 @@
 package com.finalproject.demo.controlers.validator;
 
 import com.finalproject.demo.entity.Device;
+import com.finalproject.demo.service.dto.DeviceDTO;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -14,17 +15,17 @@ public class AdminDeviceValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return Device.class.equals(aClass);
+        return DeviceDTO.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
 
-        Device device = (Device) o;
+        DeviceDTO deviceDTO = (DeviceDTO) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "serialNumber", "not.empty", "Not empty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "type", "not.empty","Not empty");
-        if (device.getSerialNumber().length() != 10) {
+        if (deviceDTO.getSerialNumber().length() != 10) {
             errors.rejectValue("serialNumber", "device.serialNumber.size", "Serial number size must be 10 numbers length!");
         }
 

@@ -1,6 +1,7 @@
 package com.finalproject.demo.service.mapper;
 
 import com.finalproject.demo.entity.Device;
+import com.finalproject.demo.repository.TypeRepository;
 import com.finalproject.demo.service.dto.DeviceDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,11 +11,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeviceMapper {
 
+    private final TypeRepository typeRepository;
+
     public Device toEntity(DeviceDTO deviceDTO) {
 
         Device result = new Device();
-        result.setId(deviceDTO.getId());
-        result.setType(deviceDTO.getType());
+        result.setType(typeRepository.findByName(deviceDTO.getType()));
         result.setSerialNumber(deviceDTO.getSerialNumber());
         result.setName(deviceDTO.getName());
         result.setPeriodLink(deviceDTO.getPeriodLink());
@@ -32,8 +34,7 @@ public class DeviceMapper {
 
         DeviceDTO result = new DeviceDTO();
 
-        result.setId(device.getId());
-        result.setType(device.getType());
+        result.setType(device.getType().getName());
         result.setSerialNumber(device.getSerialNumber());
         result.setName(device.getName());
         result.setPeriodLink(device.getPeriodLink());

@@ -1,6 +1,7 @@
 package com.finalproject.demo.service.interfaces;
 
 import com.finalproject.demo.entity.User;
+import com.finalproject.demo.service.dto.UserDTO;
 
 
 public interface UserService {
@@ -8,10 +9,10 @@ public interface UserService {
 
     void confirmRegistration(String token);
 
-    void registerNewUser(User user);
+    User registerNewUser(UserDTO userDTO);
 
     Long findUserCurrentId();
 
-    void changeUser(User user);
+    void changeUser(UserDTO userDTO);
 
 }

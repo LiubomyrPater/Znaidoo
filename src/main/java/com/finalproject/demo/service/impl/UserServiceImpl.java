@@ -8,7 +8,9 @@ import com.finalproject.demo.repository.RoleRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.VerificationTokenRepository;
 import com.finalproject.demo.repository.ViewerRepository;
+import com.finalproject.demo.service.dto.UserDTO;
 import com.finalproject.demo.service.interfaces.UserService;
+import com.finalproject.demo.service.mapper.UserMapper;
 import com.finalproject.demo.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,11 +29,12 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final VerificationTokenRepository tokenRepository;
     private final ViewerRepository viewerRepository;
-
+    private final UserMapper userMapper;
 
 
     @Override
-    public void registerNewUser(User user) {
+    public User registerNewUser(UserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
         if (userRepository.existsByEmail(user.getEmail())
                 || userRepository.existsByPhoneNumber(user.getPhoneNumber())
                 || userRepository.existsByUsername(user.getUsername())) {
@@ -41,6 +44,7 @@ public class UserServiceImpl implements UserService {
         user.getRole().add(roleRepository.findByName("ROLE_USER"));
         user.setViewer(viewerRepository.save(new Viewer()));
         userRepository.save(user);
+        return user;
     }
 
     @Override
@@ -64,13 +68,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void changeUser(User user) {
-        User persistedUser = userRepository.findByUsername(user.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("useer with id " + user.getUsername() + " was not found"));
-        persistedUser.setEmail(user.getEmail());
-        persistedUser.setPhoneNumber(user.getPhoneNumber());
-        persistedUser.setCountry(user.getCountry());
-        persistedUser.setLanguage(user.getLanguage());
+    public void changeUser(UserDTO userDTO) {
+
+        User persistedUser = userRepository.findByUsername(userDTO.getUsername())
+                .orElseThrow(() -> new EntityNotFoundException("useer with id " + userDTO.getUsername() + " was not found"));
+        persistedUser.setEmail(userDTO.getEmail());
+        persistedUser.setPhoneNumber(userDTO.getPhoneNumber());
+        persistedUser.setCountry(userDTO.getCountry());
+        persistedUser.setLanguage(userDTO.getLanguage());
         userRepository.save(persistedUser);
     }
 }

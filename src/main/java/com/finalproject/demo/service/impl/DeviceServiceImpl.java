@@ -6,12 +6,15 @@ import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
 import com.finalproject.demo.repository.ViewerRepository;
+import com.finalproject.demo.service.dto.DeviceDTO;
 import com.finalproject.demo.service.interfaces.DeviceService;
+import com.finalproject.demo.service.mapper.DeviceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -22,11 +25,14 @@ public class DeviceServiceImpl implements DeviceService {
     private final DeviceRepository deviceRepository;
     private final UserRepository userRepository;
     private final ViewerRepository viewerRepository;
+    private final DeviceMapper deviceMapper;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository, UserRepository userRepository, ViewerRepository viewerRepository) {
+    public DeviceServiceImpl(DeviceRepository deviceRepository,
+                             UserRepository userRepository, ViewerRepository viewerRepository, DeviceMapper deviceMapper) {
         this.deviceRepository = deviceRepository;
         this.userRepository = userRepository;
         this.viewerRepository = viewerRepository;
+        this.deviceMapper = deviceMapper;
     }
 
     @Override
@@ -43,12 +49,15 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public void create(Device device) {
+    public void create(DeviceDTO deviceDTO) {
+        Device device = deviceMapper.toEntity(deviceDTO);
         deviceRepository.save(device);
     }
 
     @Override
-    public void connectDeviceToUser(Device device, Principal principal) {
+    public void connectDeviceToUser(DeviceDTO deviceDTO, Principal principal) {
+
+        Device device = deviceMapper.toEntity(deviceDTO);
 
         User persistedUser = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException("user with name " + principal.getName() + " was not found"));
@@ -78,21 +87,26 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Set<Device> findDevicesByViewer(Principal principal) {
+    public Set<DeviceDTO> findDevicesByViewer(Principal principal) {
 
         Long viewerId = userRepository
                 .findByUsername(principal.getName())
                 .get()
                 .getViewer()
-                .getId();
-        Set<Device> deviceByViewers = deviceRepository.findDeviceByViewers(viewerId
-        );
-        return deviceByViewers;
+                .getId()
+                ;
+        Set<Device> deviceByViewers = deviceRepository.findDeviceByViewers(viewerId);
+        Set<DeviceDTO> deviceDTOSet = new HashSet<>();
+        deviceByViewers.forEach(x -> deviceDTOSet.add(deviceMapper.toDTO(x)));
+
+        //return deviceByViewers;
+        return deviceDTOSet;
     }
 
 
     @Override
-    public void changeDevice(Device device) {
+    public void changeDevice(DeviceDTO deviceDTO) {
+        Device device = deviceMapper.toEntity(deviceDTO);
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(device.getSerialNumber())
                 .orElseThrow(() -> new EntityNotFoundException("device with id " + device.getSerialNumber() + " was not found"));
         persistedDevice.setName(device.getName());

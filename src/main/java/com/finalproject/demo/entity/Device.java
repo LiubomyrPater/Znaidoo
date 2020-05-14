@@ -1,6 +1,6 @@
 package com.finalproject.demo.entity;
 
-import com.finalproject.demo.entity.valueObjects.enumerations.Type;
+import com.finalproject.demo.entity.valueObjects.Type;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,7 +20,10 @@ public class Device {
     @GeneratedValue
     private Long id;
 
-    @Enumerated(value = EnumType.STRING)
+   /* @Enumerated(value = EnumType.STRING)
+    private Type type;*/
+
+    @ManyToOne
     private Type type;
 
     @Column(unique = true)

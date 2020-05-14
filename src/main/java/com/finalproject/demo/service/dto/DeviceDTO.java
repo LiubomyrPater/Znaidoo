@@ -3,7 +3,8 @@ package com.finalproject.demo.service.dto;
 import com.finalproject.demo.entity.DeviceState;
 import com.finalproject.demo.entity.User;
 import com.finalproject.demo.entity.Viewer;
-import com.finalproject.demo.entity.valueObjects.enumerations.Type;
+import com.finalproject.demo.entity.valueObjects.Status;
+import com.finalproject.demo.entity.valueObjects.Type;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +20,7 @@ import java.util.Set;
 public class DeviceDTO {
 
 
-    private Long id;
-
-    private Type type;
+    private String type;
 
     private String serialNumber;
 

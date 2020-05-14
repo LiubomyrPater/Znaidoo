@@ -4,10 +4,12 @@ import com.finalproject.demo.controlers.validator.EditDeviceValidator;
 import com.finalproject.demo.controlers.validator.SimpleUserValidator;
 import com.finalproject.demo.entity.Device;
 import com.finalproject.demo.entity.User;
-import com.finalproject.demo.entity.Viewer;
 import com.finalproject.demo.repository.DeviceRepository;
 import com.finalproject.demo.repository.UserRepository;
+import com.finalproject.demo.service.dto.DeviceDTO;
+import com.finalproject.demo.service.dto.UserDTO;
 import com.finalproject.demo.service.interfaces.DeviceService;
+import com.finalproject.demo.service.mapper.DeviceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,39 +28,49 @@ public class DeviceController {
     private final DeviceRepository deviceRepository;
     private final UserRepository userRepository;
     private final EditDeviceValidator editDeviceValidator;
+    private final DeviceMapper deviceMapper;
 
 
-
-    public DeviceController(DeviceService deviceService, SimpleUserValidator simpleUserValidator, DeviceRepository deviceRepository, UserRepository userRepository, EditDeviceValidator editDeviceValidator) {
+    public DeviceController(DeviceService deviceService,
+                            SimpleUserValidator simpleUserValidator,
+                            DeviceRepository deviceRepository,
+                            UserRepository userRepository,
+                            EditDeviceValidator editDeviceValidator,
+                            DeviceMapper deviceMapper){
         this.deviceService = deviceService;
         this.simpleUserValidator = simpleUserValidator;
         this.deviceRepository = deviceRepository;
         this.userRepository = userRepository;
         this.editDeviceValidator = editDeviceValidator;
+        this.deviceMapper = deviceMapper;
     }
 
 
     @GetMapping("/editDevice")
     public String getEditDevicePage(@RequestParam("deviceSN") String sn,
-                                    @ModelAttribute("editDeviceForm") Device device,
-                                    Principal principal, Model model) {
-
+                                    @ModelAttribute("editDeviceForm") DeviceDTO deviceDTO,
+                                    Principal principal,
+                                    Model model)
+    {
         Set<Device> usersDevices = userRepository.findByUsername(principal.getName()).get().getDevice();
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn).get();
         if (!usersDevices.contains(persistedDevice))
             return "errorPage";
-        model.addAttribute("editDeviceForm", persistedDevice);
+        DeviceDTO persistedDeviceDTO = deviceMapper.toDTO(persistedDevice);
+        model.addAttribute("editDeviceForm", persistedDeviceDTO);
         persistedDevice.getViewers().remove(userRepository.findByUsername(principal.getName()).get().getViewer());
-        model.addAttribute("viewers", persistedDevice);
+        model.addAttribute("viewers", persistedDeviceDTO);
         return "editDevice";
     }
 
     @PostMapping("/editDevice")
-    public String editDevice(@ModelAttribute("editDeviceForm") Device device, BindingResult bindingResult) {
-        editDeviceValidator.validate(device, bindingResult);
+    public String editDevice(@ModelAttribute("editDeviceForm") DeviceDTO deviceDTO,
+                             BindingResult bindingResult)
+    {
+        editDeviceValidator.validate(deviceDTO, bindingResult);
         if (bindingResult.hasErrors())
             return "editDevice";
-        deviceService.changeDevice(device);
+        deviceService.changeDevice(deviceDTO);
         return "redirect:home";
     }
 
@@ -66,14 +78,14 @@ public class DeviceController {
     @GetMapping("/setViewer")
     public String getUserAddDevicePage(@RequestParam("deviceSN") String sn,
                                        Principal principal,
-                                       Model model) {
+                                       Model model)
+    {
         log.info("get deviceSN " + sn);
         Set<Device> usersDevices = userRepository.findByUsername(principal.getName()).get().getDevice();
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn).get();
-        if (!usersDevices.contains(persistedDevice)){
+        if (!usersDevices.contains(persistedDevice))
             return "errorPage";
-        }
-        model.addAttribute("addViewerForm", new User());
+        model.addAttribute("addViewerForm", new UserDTO());
         return "setViewer";
     }
 
@@ -81,13 +93,16 @@ public class DeviceController {
 
 
     @PostMapping("/setViewer")
-    public String setViewerFormPost(@ModelAttribute("addViewerForm") User user,
-                               @ModelAttribute("deviceSN") String sn,
-                               BindingResult bindingResult, Principal principal, Model model) {
+    public String setViewerFormPost(@ModelAttribute("addViewerForm") UserDTO userDTO,
+                                    @ModelAttribute("deviceSN") String sn,
+                                    BindingResult bindingResult,
+                                    Principal principal,
+                                    Model model)
+    {
         log.info("post deviceSN " + sn);
-        log.info(user.getUsername());
+        log.info(userDTO.getUsername());
 
-        if (!userRepository.findByUsername(user.getUsername()).isPresent())
+        if (!userRepository.findByUsername(userDTO.getUsername()).isPresent())
             return "setViewer";
 
         /**Не розумію чому не працює simpleUserValidator
@@ -95,11 +110,9 @@ public class DeviceController {
         if (bindingResult.hasErrors())
             return "setViewer";*/
 
-        deviceService.addViewerToDevice(user.getUsername(), sn);
-
-        Set<Device> devices = deviceService.findDevicesByViewer(principal);
+        deviceService.addViewerToDevice(userDTO.getUsername(), sn);
+        Set<DeviceDTO> devices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", devices);
-
         return "redirect:home";
     }
 

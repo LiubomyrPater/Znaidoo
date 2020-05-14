@@ -13,7 +13,6 @@ public class UserMapper {
 
         User result = new User();
 
-        result.setId(userDTO.getId());
         result.setUsername(userDTO.getUsername());
         result.setPassword(userDTO.getPassword());
         result.setEmail(userDTO.getEmail());
@@ -32,7 +31,6 @@ public class UserMapper {
 
         UserDTO result = new UserDTO();
 
-        result.setId(user.getId());
         result.setUsername(user.getUsername());
         result.setPassword(user.getPassword());
         result.setEmail(user.getEmail());
