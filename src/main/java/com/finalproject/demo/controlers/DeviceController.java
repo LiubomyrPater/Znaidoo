@@ -11,11 +11,13 @@ import com.finalproject.demo.service.dto.UserDTO;
 import com.finalproject.demo.service.interfaces.DeviceService;
 import com.finalproject.demo.service.mapper.DeviceMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.security.Principal;
 import java.util.Set;
 
@@ -50,8 +52,7 @@ public class DeviceController {
     public String getEditDevicePage(@RequestParam("deviceSN") String sn,
                                     @ModelAttribute("editDeviceForm") DeviceDTO deviceDTO,
                                     Principal principal,
-                                    Model model)
-    {
+                                    Model model){
         Set<Device> usersDevices = userRepository.findByUsername(principal.getName()).get().getDevice();
         Device persistedDevice = deviceRepository.findDeviceBySerialNumber(sn).get();
         if (!usersDevices.contains(persistedDevice))
@@ -116,14 +117,18 @@ public class DeviceController {
         return "redirect:home";
     }
 
-/** Не встигаю
-    @DeleteMapping("/editDevice/{id}")
-    public void deleteViewer(@PathVariable Long id,
-                             @ModelAttribute("deviceSN") String deviceSN,
-                             Principal principal){
 
-        deviceService.deleteViewer(deviceSN, id);
-    }*/
+    @GetMapping("/editDevice/delete")
+    public String deleteViewer(@RequestParam("deviceSN") String deviceSN,
+                               @RequestParam("id") Long id,
+                               Principal principal){
 
-
+        if (userRepository.findByUsername(principal.getName()).get()
+                .getDevice()
+                .contains(deviceRepository.findDeviceBySerialNumber(deviceSN).get())){
+            deviceService.deleteViewer(deviceSN, id);
+            return "redirect:/editDevice?deviceSN=" + deviceSN;
+        }else
+            return "errorPage";
+    }
 }

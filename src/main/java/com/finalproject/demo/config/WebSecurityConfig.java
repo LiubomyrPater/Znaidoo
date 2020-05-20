@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -17,17 +21,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
     private final ApplicationProperties applicationProperties;
 
+
     @Autowired
     public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, ApplicationProperties applicationProperties) {
         this.userDetailsService = userDetailsService;
         this.applicationProperties = applicationProperties;
     }
 
+
+
+    /**test*/
+    @Autowired
+    DataSource dataSource;
+
+    /**test*/
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(){
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
+
+
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    @Autowired
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -49,33 +74,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-
-                //.defaultSuccessUrl("/home")
                 .defaultSuccessUrl("/default")
                 .permitAll()
+
+                /*.and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/
+
+                /**test*/
+                .and()
+                .rememberMe()
+                .rememberMeParameter("ZNAIDOO-remember-me")
+                .tokenRepository(persistentTokenRepository())
+                .key("secretkey")
+                .tokenValiditySeconds(applicationProperties.getTokenValiditySeconds())
 
                 .and()
                 .logout()
                 .permitAll()
                 .logoutSuccessUrl("/")
-
-
-
-
-
                 .deleteCookies("JSESSIONID")
-                .and()
-                .rememberMe()
-                .key("uniqueAndSecret")
-                .tokenValiditySeconds(applicationProperties.getTokenValiditySeconds())
-
         ;
     }
-
-    @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }
-
-
 }

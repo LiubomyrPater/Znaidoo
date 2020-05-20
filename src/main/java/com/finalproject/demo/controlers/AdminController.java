@@ -57,6 +57,6 @@ public class AdminController {
         }
 
         deviceService.create(deviceDTO);
-        return "admin";
+        return "redirect:/";
     }
 }

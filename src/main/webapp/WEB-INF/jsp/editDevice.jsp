@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Elem
-  Date: 28.04.2020
-  Time: 9:55
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -57,10 +50,10 @@
                 <th>Another viewers</th>
                 <th width="70"></th>
                 <tbody>
-                <c:forEach items="${viewers.viewers}"  var="viewers">
+                <c:forEach items="${viewers.viewers}"  var="viewer">
                     <tr>
-                        <td>${viewers.user.username}</td>
-                        <td><a href=""  class="btn btn-danger custom width">Delete</a></td>
+                        <td>${viewer.user.username}</td>
+                        <td><a href="/editDevice/delete?id=${viewer.id}&deviceSN=${editDeviceForm.serialNumber}"  class="btn btn-danger custom width">Delete</a></td>
                     </tr>
                 </c:forEach>
                 </tbody>

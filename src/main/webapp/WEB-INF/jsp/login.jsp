@@ -25,26 +25,14 @@
 
         <div class="form-group ${error != null ? 'has-error' : ''}">
             <span>${message}</span>
-
             <input name="username" type="text" class="form-control" placeholder="Nickname" autofocus="true"/>
-
             <input name="password" type="password" class="form-control" placeholder="Password"/>
-
-            <tr>
-                <td>Remember Me:</td>
-                <td><input name="remember-me" type="checkbox" /></td>
-            </tr>
-
-
+                <div><input name="ZNAIDOO-remember-me" type="checkbox" /> Remember me</div>
             <span>${error}</span>
-
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
         </div>
 
-
         <div class="text-center" role="toolbar" aria-label="Toolbar with buttons">
-
             <button class="btn btn-lg btn-primary btn-success" type="submit">Log In</button>
             <button class="btn btn-lg btn-primary btn-warning" type="button"
                     onclick='window.location.href = "${contextPath}/registration"'>Sign In</button>
