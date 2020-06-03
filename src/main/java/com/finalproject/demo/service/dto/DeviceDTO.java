@@ -10,7 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -36,5 +38,5 @@ public class DeviceDTO {
 
     private Set<Viewer> viewers = new HashSet<>();
 
-    private Set<DeviceState> deviceState = new HashSet<>();
+    private List<DeviceState> deviceState = new ArrayList<>();
 }

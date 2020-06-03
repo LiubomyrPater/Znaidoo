@@ -153,8 +153,7 @@ public class UserController {
 
     @GetMapping("/home")
     public String getHomePage(Model model,
-                              Principal principal)
-    {
+                              Principal principal){
         model.addAttribute("message", "Hello from controller");
         Set<DeviceDTO> viewerDevices = deviceService.findDevicesByViewer(principal);
         model.addAttribute("devices", viewerDevices);

@@ -91,8 +91,6 @@ public class DeviceController {
     }
 
 
-
-
     @PostMapping("/setViewer")
     public String setViewerFormPost(@ModelAttribute("addViewerForm") UserDTO userDTO,
                                     @ModelAttribute("deviceSN") String sn,

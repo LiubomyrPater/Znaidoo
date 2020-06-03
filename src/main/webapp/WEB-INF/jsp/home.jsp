@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%--<c:set var="points" value="${devices.toArray()}" scope="application" />--%>
 
 <html>
 <head>
@@ -51,14 +52,32 @@
 
     <div class="layer2" id="map">
         <script type="text/javascript">
-            var map;
+            var center = {lat:49.721654, lng:23.735905};
+            var markers = [];
+
             function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat:49.850, lng:24.000},
+
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: center,
                     zoom: 12
                 });
+
+                <c:forEach items="${devices}" var="current" varStatus="status">
+                    <c:set var="deviceState" value='${current.deviceState}'/>
+
+                markers.push(new google.maps.Marker({
+                    position: {lat:${deviceState.get(0).latitude}, lng:${deviceState.get(0).longitude}},
+                    map: map
+                }));
+                </c:forEach>
             }
         </script>
+
+
+
+
+
+
     </div>
 
     <div class="layer3 panel panel-default">

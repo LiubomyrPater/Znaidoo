@@ -4,7 +4,9 @@ import com.finalproject.demo.entity.valueObjects.Type;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -46,7 +48,7 @@ public class Device {
 
     @OneToMany
     @JoinColumn(name = "device_id")
-    private Set<DeviceState> deviceState = new HashSet<>();
+    private List<DeviceState> deviceState = new ArrayList<>();
 
 
 }
